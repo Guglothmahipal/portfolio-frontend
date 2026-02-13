@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Prevent horizontal scroll */
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* ================= HIDE SCROLLBAR (GLOBAL) ================= */
+
+/* Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+
+/* Firefox */
+html {
+  scrollbar-width: none; /* hides scrollbar */
+}
+
+/* Internet Explorer / old Edge */
+body {
+  -ms-overflow-style: none;
+}
