@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink , Link} from "react-router-dom";
 import { FiMenu, FiMoon, FiSun } from "react-icons/fi";
 import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 import { useTheme } from "../context/ThemeContext";
@@ -64,9 +64,11 @@ const Navbar = () => {
       >
         <div className="flex items-center justify-between px-8 py-5 text-black dark:text-white">
           {/* LOGO */}
-          <h1 className="text-lg tracking-widest uppercase font-semibold">
+         <Link to="/">
+         <h1 className="text-lg tracking-widest uppercase font-semibold">
             Mahipal
           </h1>
+         </Link> 
 
           {/* ACTIONS */}
           <div

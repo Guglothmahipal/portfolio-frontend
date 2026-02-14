@@ -3,6 +3,9 @@ import { FiGithub, FiExternalLink } from "react-icons/fi";
 import heroImage from "../assets/HomeRightIMG.jpg";
 import { useNavigate } from "react-router-dom";
 
+import PublicLayout from "../layouts/PublicLayout";
+
+
 /* ================= STATIC TOP PROJECTS ================= */
 const topProjects = [
   {
@@ -39,6 +42,8 @@ const Home = () => {
 
   return (
     <>
+
+      <PublicLayout/>
       {/* ================= HERO SECTION ================= */}
       <section className="relative min-h-screen flex items-center pt-24">
         <div className="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-2 gap-12">
