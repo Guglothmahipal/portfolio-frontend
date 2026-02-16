@@ -56,7 +56,7 @@ const FeedbackButton = ({ onClick }: FeedbackButtonProps) => {
           }
         `}
       >
-        Leave Feedback
+        Share Feedback
       </span>
     </div>
   );

@@ -25,3 +25,46 @@ html {
 body {
   -ms-overflow-style: none;
 }
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 20s linear infinite;
+}
+
+.google-color-cycle {
+  animation: googleColorChange 10s ease-in-out infinite;
+}
+
+/* Google Style Color Cycle */
+@keyframes googleColorChange {
+  0%   { color: #ff9800; }  /* orange */
+  20%  { color: #ea4335; }  /* red */
+  40%  { color: #34a853; }  /* green */
+  60%  { color: #4285f4; }  /* blue */
+  80%  { color: #fbbc05; }  /* yellow */
+  100% { color: #ff9800; }  /* back to orange */
+}
+
+/* ================= GOOGLE BORDER ANIMATION ================= */
+
+.google-border-cycle {
+  border: 2px solid;
+  animation: googleBorderChange 6s ease-in-out infinite;
+}
+
+/* Google Style Border Color Cycle */
+@keyframes googleBorderChange {
+  0%   { border-color: #ff9800; }  /* orange */
+  20%  { border-color: #ea4335; }  /* red */
+  40%  { border-color: #34a853; }  /* green */
+  60%  { border-color: #4285f4; }  /* blue */
+  80%  { border-color: #fbbc05; }  /* yellow */
+  100% { border-color: #ff9800; }  /* back to orange */
+}
