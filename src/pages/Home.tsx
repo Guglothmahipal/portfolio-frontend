@@ -1,10 +1,8 @@
 import { motion } from "framer-motion";
 import { FiGithub, FiExternalLink } from "react-icons/fi";
 import heroImage from "../assets/HomeRightIMG.jpg";
-import { useNavigate } from "react-router-dom";
-
-import PublicLayout from "../layouts/PublicLayout";
-
+import { useState } from "react";
+import ResumeModal from "../components/ResumeModal";
 
 /* ================= STATIC TOP PROJECTS ================= */
 const topProjects = [
@@ -38,15 +36,13 @@ const topProjects = [
 ];
 
 const Home = () => {
-  const navigate = useNavigate();
+  const [isResumeOpen, setIsResumeOpen] = useState(false);
 
   return (
     <>
-
-      <PublicLayout/>
       {/* ================= HERO SECTION ================= */}
       <section className="relative min-h-screen flex items-center pt-24">
-        <div className="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 grid grid-cols-1 md:grid-cols-2 gap-12">
           
           {/* LEFT CONTENT */}
           <motion.div
@@ -55,15 +51,15 @@ const Home = () => {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="flex flex-col justify-center"
           >
-            <h2 className="text-sm tracking-widest uppercase text-gray-500 dark:text-gray-400 mb-4">
+            <h2 className="text-[clamp(0.75rem,2vw,0.9rem)] tracking-widest uppercase text-gray-500 dark:text-gray-400 mb-4">
               Hello, I’m
             </h2>
 
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">
-              Mahipal 
+            <h1 className="text-[clamp(2rem,6vw,4rem)] font-bold mb-6 leading-tight">
+              Mahipal
             </h1>
 
-            <p className="text-gray-600 dark:text-gray-400 max-w-md mb-8">
+            <p className="text-[clamp(0.9rem,2.5vw,1.1rem)] text-gray-600 dark:text-gray-400 max-w-md mb-8">
               I’m a software developer focused on building modern web
               applications, cloud-native systems, and scalable solutions.
             </p>
@@ -73,10 +69,10 @@ const Home = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.6 }}
-              className="flex flex-wrap gap-5"
+              className="flex gap-3"
             >
               <button
-                className="px-8 py-3 rounded-full font-semibold text-white 
+                className="px-[clamp(0.8rem,2.5vw,2rem)] py-3 whitespace-nowrap rounded-full font-semibold text-white 
                 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500
                 shadow-lg shadow-purple-500/30 transition-all duration-300
                 hover:scale-105 hover:shadow-xl hover:shadow-pink-500/40"
@@ -85,9 +81,9 @@ const Home = () => {
               </button>
 
               <button
-                onClick={() => navigate("/resume")}
-                className="px-8 py-3 rounded-full font-semibold border-2 
-                border-gray-400 dark:border-gray-600 text-gray-800 
+                onClick={() => setIsResumeOpen(true)}
+                className="px-[clamp(0.8rem,2.5vw,2rem)] py-3 whitespace-nowrap rounded-full font-semibold border-2 
+                border-gray-500 dark:border-gray-600 text-gray-800 
                 dark:text-gray-200 transition-all duration-300
                 hover:bg-black hover:text-white 
                 dark:hover:bg-white dark:hover:text-black hover:scale-105"
@@ -113,135 +109,73 @@ const Home = () => {
         </div>
       </section>
 
-     {/* ================= TOP PROJECTS ================= */}
-<section id="projects" className="py-28">
-  <div className="max-w-8xl mx-auto px-8">
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-center">
+      {/* ================= TOP PROJECTS ================= */}
+      <section id="projects" className="py-28">
+        <div className="max-w-8xl mx-auto px-6 sm:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-center">
 
-      {/* LEFT STATIC CONTENT */}
-      <div className="lg:col-span-1">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4 ml-14">
-          Top Projects
-        </h2>
+            <div className="lg:col-span-1">
+              <h2 className="text-[clamp(1.5rem,4vw,2.5rem)] font-bold mb-4 ml-6 sm:ml-14">
+                Top Projects
+              </h2>
 
-        <p className="text-gray-600 dark:text-gray-400 max-w-sm ml-14">
-          A curated list of projects showcasing my skills in frontend,
-          backend, and cloud technologies.
-        </p>
-      </div>
+              <p className="text-[clamp(0.9rem,2vw,1rem)] text-gray-600 dark:text-gray-400 max-w-sm ml-6 sm:ml-14">
+                A curated list of projects showcasing my skills in frontend,
+                backend, and cloud technologies.
+              </p>
+            </div>
 
-      {/* RIGHT PROJECT CARDS */}
-      <div className="lg:col-span-2">
-        <div
-          className="
-            flex
-            gap-6
-            overflow-x-auto
-            overflow-y-visible
-            pb-10
-            snap-x snap-mandatory
-            scrollbar-hide
-          "
-        >
-          {topProjects.map((project) => (
-            <div
-              key={project.id}
-              className="
-                snap-start
-                relative
-                w-[260px] md:w-[280px]
-                h-[360px]
-                flex-shrink-0
-                rounded-2xl
-                overflow-hidden
-                bg-gray-200
-                shadow-lg
-              "
-            >
-              {/* BACKGROUND IMAGE */}
-              <img
-                src={heroImage}
-                alt={project.title}
-                className="
-                  absolute inset-0
-                  w-full h-full
-                  object-cover
-                "
-              />
-
-              {/* FLOATING INFO CARD */}
-              <div
-                className="
-                  absolute bottom-4 left-4 right-4
-                  bg-white dark:bg-gray-900
-                  rounded-xl
-                  p-4
-                  shadow-md
-                "
-              >
-                <h3 className="text-sm font-semibold mb-2 text-gray-900 dark:text-white">
-                  {project.title}
-                </h3>
-
-                {/* TECH STACK */}
-                <div className="flex flex-wrap gap-1 mb-3">
-                  {project.tech.map((tech) => (
-                    <span
-                      key={tech}
-                      className="
-                        text-[10px]
-                        px-2 py-0.5
-                        rounded
-                        bg-gray-100
-                        dark:bg-gray-800
-                        text-gray-700
-                        dark:text-gray-300
-                      "
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-
-                {/* LINKS */}
-                <div className="flex gap-4 text-xs text-gray-700 dark:text-gray-300">
-                  <a
-                    href={project.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1 hover:underline"
+            <div className="lg:col-span-2">
+              <div className="flex gap-6 overflow-x-auto pb-10 snap-x snap-mandatory scrollbar-hide">
+                {topProjects.map((project) => (
+                  <div
+                    key={project.id}
+                    className="snap-start relative w-[260px] md:w-[280px] h-[360px] flex-shrink-0 rounded-2xl overflow-hidden bg-gray-200 shadow-lg"
                   >
-                    <FiGithub /> Code
-                  </a>
+                    <img
+                      src={heroImage}
+                      alt={project.title}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
 
-                  <a
-                    href={project.live}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1 hover:underline"
-                  >
-                    <FiExternalLink /> Live
-                  </a>
-                </div>
+                    <div className="absolute bottom-4 left-4 right-4 bg-white dark:bg-gray-900 rounded-xl p-4 shadow-md">
+                      <h3 className="text-sm font-semibold mb-2 text-gray-900 dark:text-white">
+                        {project.title}
+                      </h3>
+
+                      <div className="flex flex-wrap gap-1 mb-3">
+                        {project.tech.map((tech) => (
+                          <span
+                            key={tech}
+                            className="text-[10px] px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+
+                      <div className="flex gap-4 text-xs text-gray-700 dark:text-gray-300">
+                        <a href={project.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 hover:underline">
+                          <FiGithub /> Code
+                        </a>
+                        <a href={project.live} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 hover:underline">
+                          <FiExternalLink /> Live
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-          ))}
+
+          </div>
         </div>
-      </div>
+      </section>
 
-    </div>
-  </div>
-</section>
-
-
-
-
-      {/* ================= FOOTER ================= */}
-      <footer className="py-8 border-t border-gray-200 dark:border-gray-800">
-        <div className="max-w-7xl mx-auto px-8 text-center text-sm text-gray-500 dark:text-gray-400">
-          © {new Date().getFullYear()} Mahipal. All rights reserved.
-        </div>
-      </footer>
+      <ResumeModal
+        isOpen={isResumeOpen}
+        onClose={() => setIsResumeOpen(false)}
+      />
     </>
   );
 };
