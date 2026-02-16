@@ -10,6 +10,10 @@ interface FeedbackModalProps {
 const FeedbackModal = ({ isOpen, onClose }: FeedbackModalProps) => {
   const [message, setMessage] = useState("");
 
+    // 🔒 Lock scroll on BOTH html and body
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+
   // ESC + Scroll lock
   useEffect(() => {
     if (!isOpen) return;
