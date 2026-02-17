@@ -38,26 +38,58 @@ const Home = () => {
               provide freelance digital services for businesses and individuals.
             </p>
 
-            <div className="flex gap-4 w-full sm:w-auto">
-              
-              {/* Explore Services Button */}
-              <button
+            {/* ===== BUTTONS UPDATED ===== */}
+<div className="flex gap-4 justify-center md:justify-start">
+
+  {/* Explore Services Button (Glassy + Animated Text) */}
+  <button
   onClick={() => navigate("/services")}
-  className="flex-1 sm:flex-none px-6 py-3 rounded-full font-semibold google-border-cycle transition-all duration-300 hover:scale-105 hover:bg-gray-100 dark:hover:bg-gray-800"
+  className="
+    px-5 py-2.5 md:px-6 md:py-3
+    text-sm md:text-base
+    rounded-full
+    font-semibold
+    backdrop-blur-xl
+    bg-gradient-to-b from-white/40 to-gray-200/40
+    border
+    border-gray-300/70
+    shadow-[0_8px_25px_rgba(0,0,0,0.12)]
+    hover:from-white/50
+    hover:to-gray-300/50
+    hover:shadow-[0_12px_35px_rgba(0,0,0,0.18)]
+    transition-all duration-300
+    whitespace-nowrap
+    google-color-cycle
+  "
 >
   Explore Services
 </button>
 
 
-              {/* See My Work Button */}
-              <button
-  onClick={() => navigate("/projects")}
-  className="flex-1 sm:flex-none px-6 py-3 rounded-full bg-black text-white border-2 border-black transition-all duration-300 hover:bg-white hover:text-black hover:border-black"
->
-  See My Work
-</button>
+  {/* See My Work Button */}
+  <button
+    onClick={() => navigate("/projects")}
+    className="
+      px-5 py-2.5 md:px-6 md:py-3
+      text-sm md:text-base
+      rounded-full
+      bg-black
+      text-white
+      border-2
+      border-black
+      transition-all duration-300
+      hover:bg-white
+      hover:text-black
+      hover:border-black
+      hover:scale-105
+      whitespace-nowrap
+    "
+  >
+    See My Work
+  </button>
 
-            </div>
+</div>
+
           </motion.div>
 
           <motion.div
@@ -181,30 +213,53 @@ const Home = () => {
       </section>
 
       {/* ================= SKILLS MARQUEE ================= */}
-      <section className="py-16 overflow-hidden border-y border-gray-200 dark:border-gray-800">
-        <div className="flex gap-16 whitespace-nowrap animate-marquee text-xl font-semibold text-gray-500 dark:text-gray-400">
-          {[
-            "React",
-            "Next.js",
-            "TypeScript",
-            "AWS",
-            "Google Cloud",
-            "Firebase",
-            "Docker",
-            "Kubernetes",
-            "Node.js",
-            "Tailwind CSS",
-            "Framer Motion",
-          ].map((skill, index) => (
-            <span
-              key={index}
-              className="hover:text-black dark:hover:text-white transition-colors duration-300"
-            >
-              • {skill}
-            </span>
-          ))}
-        </div>
-      </section>
+<section className="py-10 md:py-16 overflow-hidden border-y border-gray-200 dark:border-gray-800">
+  <div className="relative w-full">
+
+    <div className="flex w-max animate-marquee gap-10 md:gap-16">
+
+      {[
+        { name: "React", color: "bg-blue-500" },
+        { name: "Next.js", color: "bg-black" },
+        { name: "TypeScript", color: "bg-blue-600" },
+        { name: "AWS", color: "bg-orange-500" },
+        { name: "Google Cloud", color: "bg-green-500" },
+        { name: "Firebase", color: "bg-yellow-500" },
+        { name: "Docker", color: "bg-sky-500" },
+        { name: "Kubernetes", color: "bg-indigo-500" },
+        { name: "Node.js", color: "bg-green-600" },
+        { name: "Tailwind CSS", color: "bg-cyan-500" },
+        { name: "Framer Motion", color: "bg-pink-500" },
+      ]
+        .concat([
+          { name: "React", color: "bg-blue-500" },
+          { name: "Next.js", color: "bg-black" },
+          { name: "TypeScript", color: "bg-blue-600" },
+          { name: "AWS", color: "bg-orange-500" },
+          { name: "Google Cloud", color: "bg-green-500" },
+          { name: "Firebase", color: "bg-yellow-500" },
+          { name: "Docker", color: "bg-sky-500" },
+          { name: "Kubernetes", color: "bg-indigo-500" },
+          { name: "Node.js", color: "bg-green-600" },
+          { name: "Tailwind CSS", color: "bg-cyan-500" },
+          { name: "Framer Motion", color: "bg-pink-500" },
+        ])
+        .map((skill, index) => (
+          <div
+            key={index}
+            className="flex items-center gap-3 text-lg md:text-xl font-semibold text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors duration-300"
+          >
+            {/* Colored Dot */}
+            <span className={`w-3 h-3 rounded-full ${skill.color}`} />
+            {skill.name}
+          </div>
+        ))}
+
+    </div>
+
+  </div>
+</section>
+
     </>
   );
 };
