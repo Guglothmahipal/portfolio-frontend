@@ -68,25 +68,26 @@ const Home = () => {
 
   {/* See My Work Button */}
   <button
-    onClick={() => navigate("/projects")}
-    className="
-      px-5 py-2.5 md:px-6 md:py-3
-      text-sm md:text-base
-      rounded-full
-      bg-black
-      text-white
-      border-2
-      border-black
-      transition-all duration-300
-      hover:bg-white
-      hover:text-black
-      hover:border-black
-      hover:scale-105
-      whitespace-nowrap
-    "
-  >
-    See My Work
-  </button>
+  onClick={() => navigate("/projects")}
+  className="
+    px-5 py-2.5 md:px-6 md:py-3
+    text-sm md:text-base
+    rounded-full
+    font-semibold
+    border-2
+    transition-all duration-300
+    whitespace-nowrap
+
+    bg-black text-white border-black
+    hover:bg-white hover:text-black
+
+    dark:bg-white dark:text-black dark:border-white
+    dark:hover:bg-black dark:hover:text-white dark:hover:border-white
+  "
+>
+  See My Work
+</button>
+
 
 </div>
 
