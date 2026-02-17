@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { NavLink , Link} from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { FiMenu, FiMoon, FiSun } from "react-icons/fi";
 import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 import { useTheme } from "../context/ThemeContext";
@@ -51,41 +51,93 @@ const Navbar = () => {
     };
   }, [open]);
 
+  const navItems = [
+    { name: "Home", path: "/" },
+    { name: "About", path: "/about" },
+    { name: "Skills", path: "/skills" },
+    { name: "Projects", path: "/projects" },
+    { name: "Contact", path: "/contact" },
+  ];
+
   return (
     <>
-      {/* ================= NAVBAR ================= */}
       <nav
         className={`
           fixed top-0 left-0 w-full z-50
-          bg-transparent
           transition-transform duration-300
           ${hidden ? "-translate-y-full" : "translate-y-0"}
         `}
       >
         <div className="flex items-center justify-between px-8 py-5 text-black dark:text-white">
-          {/* LOGO */}
-         <Link to="/">
-         <h1 className="text-lg tracking-widest uppercase font-semibold">
-            Mahipal
-          </h1>
-         </Link> 
+          
+          {/* ================= LEFT: NAME ================= */}
+          <Link to="/">
+            <h1 className="text-lg tracking-widest uppercase font-semibold">
+              Mahipal
+            </h1>
+          </Link>
 
-          {/* ACTIONS */}
+          {/* ================= CENTER: DESKTOP GLASS NAV ================= */}
+          <div className="hidden md:flex absolute left-1/2 -translate-x-1/2">
+            <div
+              className="
+                flex items-center gap-8 px-8 py-3
+                rounded-full
+                backdrop-blur-md
+                bg-white/30 dark:bg-white/10
+                border border-gray-300 dark:border-gray-600
+                shadow-lg
+              "
+            >
+              {navItems.map((item) => (
+                <NavLink
+                  key={item.name}
+                  to={item.path}
+                  className={({ isActive }) =>
+                    `text-sm font-medium transition-colors duration-300 
+                    ${
+                      isActive
+                        ? "text-orange-500"
+                        : "hover:text-orange-500"
+                    }`
+                  }
+                >
+                  {item.name}
+                </NavLink>
+              ))}
+
+              {/* ===== THEME TOGGLE INSIDE GLASS NAV ===== */}
+              <button
+                onClick={toggleTheme}
+                className="ml-2 text-lg hover:text-orange-500 transition"
+              >
+                {theme === "dark" ? <FiSun /> : <FiMoon />}
+              </button>
+            </div>
+          </div>
+
+          {/* ================= RIGHT ACTIONS (MOBILE ONLY) ================= */}
           <div
             className="relative flex items-center gap-6 text-xl"
             ref={menuRef}
           >
-            {/* THEME TOGGLE */}
-            <button onClick={toggleTheme}>
+            {/* MOBILE THEME TOGGLE (unchanged for mobile) */}
+            <button
+              className="md:hidden"
+              onClick={toggleTheme}
+            >
               {theme === "dark" ? <FiSun /> : <FiMoon />}
             </button>
 
-            {/* MENU BUTTON */}
-            <button onClick={() => setOpen((prev) => !prev)}>
+            {/* MOBILE MENU BUTTON (UNCHANGED) */}
+            <button
+              className="md:hidden"
+              onClick={() => setOpen((prev) => !prev)}
+            >
               <FiMenu />
             </button>
 
-            {/* ================= DROPDOWN MENU ================= */}
+            {/* ================= MOBILE DROPDOWN (UNCHANGED) ================= */}
             {open && (
               <div
                 onClick={(e) => e.stopPropagation()}
@@ -99,13 +151,7 @@ const Navbar = () => {
                 "
               >
                 <ul className="flex flex-col py-2 text-sm">
-                  {[
-                    { name: "Home", path: "/" },
-                    { name: "About", path: "/about" },
-                    { name: "Skills", path: "/skills" },
-                    { name: "Projects", path: "/projects" },
-                    { name: "Contact", path: "/contact" },
-                  ].map((item) => (
+                  {navItems.map((item) => (
                     <NavLink
                       key={item.name}
                       to={item.path}
@@ -134,7 +180,7 @@ const Navbar = () => {
                     <FaLinkedin />
                   </a>
                   <a
-                    href="https://twitter.com/mahipal"
+                    href="https://x.com/mahipal7g"
                     target="_blank"
                     rel="noreferrer"
                   >
