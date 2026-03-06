@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import webDevImage from "../assets/webdev.jpg";
 
@@ -11,7 +10,6 @@ import {
 } from "react-icons/fa";
 
 const Home = () => {
-  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   const navigate = useNavigate();
   const marqueeSkills = [
     { name: "React", color: "bg-blue-500" },
@@ -342,6 +340,8 @@ const Home = () => {
 };
 
 export default Home;
+
+
 
 
 
