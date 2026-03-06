@@ -10,7 +10,6 @@ const Navbar = () => {
 
   const { theme, toggleTheme } = useTheme();
 
-  /* ================= CLOSE ON OUTSIDE CLICK ================= */
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
@@ -29,10 +28,9 @@ const Navbar = () => {
 
   const navItems = [
     { name: "Home", path: "/" },
-    { name: "About", path: "/about" },
-    { name: "Skills", path: "/skills" },
     { name: "Services", path: "/services" },
     { name: "Projects", path: "/projects" },
+    { name: "About", path: "/about" },
     { name: "Contact", path: "/contact" },
   ];
 
@@ -44,14 +42,12 @@ const Navbar = () => {
         `}
       >
         <div className="flex items-center justify-between px-8 py-5 text-black dark:text-white">
-          {/* ================= LEFT: NAME ================= */}
           <Link to="/">
             <h1 className="text-lg tracking-widest uppercase font-semibold">
               Mahipal
             </h1>
           </Link>
 
-          {/* ================= CENTER: DESKTOP GLASS NAV ================= */}
           <div className="hidden md:flex absolute left-1/2 -translate-x-1/2">
             <div
               className="
@@ -76,7 +72,6 @@ const Navbar = () => {
                 </NavLink>
               ))}
 
-              {/* ===== THEME TOGGLE INSIDE GLASS NAV ===== */}
               <button
                 onClick={toggleTheme}
                 className="ml-2 text-lg hover:text-orange-500 transition"
@@ -86,19 +81,15 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* ================= RIGHT ACTIONS (MOBILE ONLY) ================= */}
           <div className="relative flex items-center gap-6 text-xl" ref={menuRef}>
-            {/* MOBILE THEME TOGGLE (unchanged for mobile) */}
             <button className="md:hidden" onClick={toggleTheme}>
               {theme === "dark" ? <FiSun /> : <FiMoon />}
             </button>
 
-            {/* MOBILE MENU BUTTON (UNCHANGED) */}
             <button className="md:hidden" onClick={() => setOpen((prev) => !prev)}>
               <FiMenu />
             </button>
 
-            {/* ================= MOBILE DROPDOWN (UNCHANGED) ================= */}
             {open && (
               <div
                 onClick={(e) => e.stopPropagation()}
@@ -124,7 +115,6 @@ const Navbar = () => {
                   ))}
                 </ul>
 
-                {/* MOBILE SOCIAL ICONS */}
                 <div className="md:hidden border-t border-gray-200 dark:border-gray-700 px-4 py-3 flex gap-4 text-lg">
                   <a href="https://github.com/guglothmahipal" target="_blank" rel="noreferrer">
                     <FaGithub />
@@ -146,10 +136,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-
-
-
-
-
-

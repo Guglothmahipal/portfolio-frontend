@@ -122,16 +122,12 @@ const Home = () => {
             className="w-full md:justify-self-end md:pl-2"
           >
             <div className="w-full max-w-[30rem] ml-auto">
-              <div className="flex items-start justify-between gap-3 mb-4">
-                <div>
-                  <h3 className="text-2xl md:text-[2rem] leading-none font-bold text-gray-900 dark:text-white">
-                    Get in touch
-                  </h3>
-                  <p className="mt-2 text-base text-gray-500 dark:text-gray-400">
-                    I would love to hear from you.
-                  </p>
-                </div>
-                <div className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700">
+              <form
+                action="https://formsubmit.co/guglothmahipal@gmail.com"
+                method="POST"
+                className="relative space-y-3 border border-gray-300 dark:border-gray-700 rounded-2xl p-4 pt-10 md:p-5 md:pt-12 bg-white/45 dark:bg-black/10 shadow-[0_10px_30px_rgba(0,0,0,0.08)]"
+              >
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 md:left-auto md:right-4 md:translate-x-0 inline-flex items-center gap-2 rounded-full px-3 py-1.5 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700">
                   <span className="relative flex h-2.5 w-2.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
                     <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500" />
@@ -140,13 +136,6 @@ const Home = () => {
                     Available for work
                   </span>
                 </div>
-              </div>
-
-              <form
-                action="https://formsubmit.co/guglothmahipal@gmail.com"
-                method="POST"
-                className="space-y-3 border border-gray-300 dark:border-gray-700 rounded-2xl p-4 md:p-5 bg-white/45 dark:bg-black/10 shadow-[0_10px_30px_rgba(0,0,0,0.08)]"
-              >
                 <input type="hidden" name="_subject" value="New Portfolio Inquiry" />
                 <input type="hidden" name="_captcha" value="false" />
 
@@ -202,14 +191,14 @@ const Home = () => {
 
                 <label className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-400">
                   <input type="checkbox" required className="mt-0.5" />
-                  <span>I agree to your privacy policy.</span>
+                  <span>I agree to your <a href="/privacy-policy" className="underline underline-offset-2">privacy policy</a>.</span>
                 </label>
 
                 <button
                   type="submit"
                   className="w-full rounded-xl bg-amber-600 text-white px-5 py-2.5 font-semibold hover:bg-amber-700 transition"
                 >
-                  Send message
+                  Get in Touch Today
                 </button>
               </form>
             </div>
@@ -340,6 +329,7 @@ const Home = () => {
 };
 
 export default Home;
+
 
 
 
