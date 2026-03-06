@@ -45,7 +45,7 @@ const Navbar = () => {
       >
         <div className="flex items-center justify-between px-8 py-5 text-black dark:text-white">
           {/* ================= LEFT: NAME ================= */}
-          <Link to="/" className="rounded-full border border-gray-300/60 dark:border-gray-600/60 bg-white/20 dark:bg-black/20 backdrop-blur-md px-4 py-2">
+          <Link to="/">
             <h1 className="text-lg tracking-widest uppercase font-semibold">
               Mahipal
             </h1>
@@ -146,6 +146,9 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+
+
 
 
 
