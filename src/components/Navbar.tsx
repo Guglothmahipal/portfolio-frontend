@@ -6,38 +6,14 @@ import { useTheme } from "../context/ThemeContext";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
-  const [hidden, setHidden] = useState(false);
-
-  const lastScrollY = useRef<number>(0);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
   const { theme, toggleTheme } = useTheme();
 
-  /* ================= AUTO HIDE ON SCROLL ================= */
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-
-      if (currentScrollY > lastScrollY.current && currentScrollY > 80) {
-        setHidden(true);
-      } else {
-        setHidden(false);
-      }
-
-      lastScrollY.current = currentScrollY;
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   /* ================= CLOSE ON OUTSIDE CLICK ================= */
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (
-        menuRef.current &&
-        !menuRef.current.contains(e.target as Node)
-      ) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setOpen(false);
       }
     };
@@ -55,6 +31,7 @@ const Navbar = () => {
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
     { name: "Skills", path: "/skills" },
+    { name: "Services", path: "/services" },
     { name: "Projects", path: "/projects" },
     { name: "Contact", path: "/contact" },
   ];
@@ -64,14 +41,11 @@ const Navbar = () => {
       <nav
         className={`
           fixed top-0 left-0 w-full z-50
-          transition-transform duration-300
-          ${hidden ? "-translate-y-full" : "translate-y-0"}
         `}
       >
         <div className="flex items-center justify-between px-8 py-5 text-black dark:text-white">
-          
           {/* ================= LEFT: NAME ================= */}
-          <Link to="/">
+          <Link to="/" className="rounded-full border border-gray-300/60 dark:border-gray-600/60 bg-white/20 dark:bg-black/20 backdrop-blur-md px-4 py-2">
             <h1 className="text-lg tracking-widest uppercase font-semibold">
               Mahipal
             </h1>
@@ -95,11 +69,7 @@ const Navbar = () => {
                   to={item.path}
                   className={({ isActive }) =>
                     `text-sm font-medium transition-colors duration-300 
-                    ${
-                      isActive
-                        ? "text-orange-500"
-                        : "hover:text-orange-500"
-                    }`
+                    ${isActive ? "text-orange-500" : "hover:text-orange-500"}`
                   }
                 >
                   {item.name}
@@ -117,23 +87,14 @@ const Navbar = () => {
           </div>
 
           {/* ================= RIGHT ACTIONS (MOBILE ONLY) ================= */}
-          <div
-            className="relative flex items-center gap-6 text-xl"
-            ref={menuRef}
-          >
+          <div className="relative flex items-center gap-6 text-xl" ref={menuRef}>
             {/* MOBILE THEME TOGGLE (unchanged for mobile) */}
-            <button
-              className="md:hidden"
-              onClick={toggleTheme}
-            >
+            <button className="md:hidden" onClick={toggleTheme}>
               {theme === "dark" ? <FiSun /> : <FiMoon />}
             </button>
 
             {/* MOBILE MENU BUTTON (UNCHANGED) */}
-            <button
-              className="md:hidden"
-              onClick={() => setOpen((prev) => !prev)}
-            >
+            <button className="md:hidden" onClick={() => setOpen((prev) => !prev)}>
               <FiMenu />
             </button>
 
@@ -165,25 +126,13 @@ const Navbar = () => {
 
                 {/* MOBILE SOCIAL ICONS */}
                 <div className="md:hidden border-t border-gray-200 dark:border-gray-700 px-4 py-3 flex gap-4 text-lg">
-                  <a
-                    href="https://github.com/guglothmahipal"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
+                  <a href="https://github.com/guglothmahipal" target="_blank" rel="noreferrer">
                     <FaGithub />
                   </a>
-                  <a
-                    href="https://linkedin.com/in/guglothmahipal"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
+                  <a href="https://linkedin.com/in/guglothmahipal" target="_blank" rel="noreferrer">
                     <FaLinkedin />
                   </a>
-                  <a
-                    href="https://x.com/mahipal7g"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
+                  <a href="https://x.com/mahipal7g" target="_blank" rel="noreferrer">
                     <FaTwitter />
                   </a>
                 </div>
@@ -197,3 +146,7 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+
+
+

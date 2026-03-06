@@ -2,6 +2,8 @@ import { motion } from "framer-motion";
 import heroImage from "../assets/HomeRightIMG.jpg";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import webDevImage from "../assets/webdev.jpg";
+
 import {
   FaCode,
   FaCloud,
@@ -126,25 +128,39 @@ const Home = () => {
 
             {/* BIG CARD */}
             <motion.div
-              onMouseEnter={() => setHoveredCard("dev")}
-              onMouseLeave={() => setHoveredCard(null)}
-              whileHover={{ y: -8 }}
-              className={`md:col-span-2 md:row-span-2 rounded-3xl p-8 bg-gray-50 dark:bg-gray-900 border transition ${
-                hoveredCard === "dev"
-                  ? "google-border-cycle"
-                  : "border-gray-200 dark:border-gray-800"
-              }`}
-            >
-              <FaCode className="text-3xl mb-6 text-indigo-500" />
-              <h3 className="text-2xl font-semibold mb-4">
-                Web & Application Development
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                I design and build modern websites, full-stack applications,
-                dashboards, and scalable systems tailored for startups,
-                businesses, and personal brands.
-              </p>
-            </motion.div>
+  onMouseEnter={() => setHoveredCard("dev")}
+  onMouseLeave={() => setHoveredCard(null)}
+  whileHover={{ y: -8 }}
+  className={`md:col-span-2 md:row-span-2 rounded-3xl p-8 relative overflow-hidden border transition ${
+    hoveredCard === "dev"
+      ? "google-border-cycle"
+      : "border-gray-200 dark:border-gray-800"
+  }`}
+>
+  {/* Background Image */}
+  <img
+    src={webDevImage}
+    alt="Web Development"
+    className="absolute inset-0 w-full h-full object-cover opacity-80"
+  />
+
+  {/* Dark Overlay (Improves Readability) */}
+  <div className="absolute inset-0 bg-white/70 dark:bg-black/70 backdrop-blur-sm"></div>
+
+  {/* Content */}
+  <div className="relative z-10">
+    <FaCode className="text-3xl mb-6 text-indigo-500" />
+    <h3 className="text-2xl font-semibold mb-4">
+      Web & Application Development
+    </h3>
+    <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+      I design and build modern websites, full-stack applications,
+      dashboards, and scalable systems tailored for startups,
+      businesses, and personal brands.
+    </p>
+  </div>
+</motion.div>
+
 
             {/* CLOUD CARD */}
             <motion.div
