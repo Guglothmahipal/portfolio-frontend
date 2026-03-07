@@ -1,13 +1,14 @@
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import webDevImage from "../assets/webdev.jpg";
-import { useMemo, useState } from "react";
+import { type FormEvent, useEffect, useMemo, useRef, useState } from "react";
 
 import {
   FaCode,
   FaCloud,
   FaProjectDiagram,
   FaLaptopCode,
+  FaChevronDown,
 } from "react-icons/fa";
 
 const Home = () => {
@@ -25,6 +26,9 @@ const Home = () => {
   const [phoneInputValue, setPhoneInputValue] = useState("");
   const [phoneCountry, setPhoneCountry] = useState("IN");
   const [isCountryOpen, setIsCountryOpen] = useState(false);
+  const [submitState, setSubmitState] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [submitMessage, setSubmitMessage] = useState("");
+  const countryDropdownRef = useRef<HTMLDivElement | null>(null);
 
   const phoneCountries = [
     { iso: "IN", name: "India", dialCode: "91" },
@@ -53,6 +57,20 @@ const Home = () => {
   const selectedPhoneCountry =
     phoneCountries.find((item) => item.iso === phoneCountry) ?? phoneCountries[0];
 
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (
+        countryDropdownRef.current &&
+        !countryDropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsCountryOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, []);
+
   const isPhoneValid = useMemo(() => {
     const digits = phoneInputValue.replace(/\D/g, "");
     return digits.length >= 6;
@@ -69,6 +87,59 @@ const Home = () => {
     [formValues, isPhoneValid]
   );
 
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!isFormValid || submitState === "sending") return;
+
+    setSubmitState("sending");
+    setSubmitMessage("");
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    formData.set("_captcha", "false");
+    formData.set("_template", "table");
+
+    try {
+      const response = await fetch(
+        "https://formsubmit.co/ajax/guglothmahipal007@gmail.com",
+        {
+          method: "POST",
+          headers: { Accept: "application/json" },
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Form submission failed");
+      }
+
+      setSubmitState("success");
+      setSubmitMessage(
+        "Thank you for your message. I will review it and get back to you soon."
+      );
+
+      setFormValues({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        message: "",
+        agreed: false,
+      });
+      setPhoneDialCode("91");
+      setPhoneInputValue("");
+      setPhoneCountry("IN");
+      setIsCountryOpen(false);
+      form.reset();
+    } catch {
+      setSubmitState("error");
+      setSubmitMessage(
+        "Submission failed. Please try again in a moment or contact me directly."
+      );
+    }
+  };
+
   const marqueeSkills = [
     { name: "React", color: "bg-blue-500" },
     { name: "Next.js", color: "bg-black" },
@@ -82,7 +153,6 @@ const Home = () => {
     { name: "Tailwind CSS", color: "bg-cyan-500" },
     { name: "Framer Motion", color: "bg-pink-500" },
   ];
-
   return (
     <>      {/* ================= HERO SECTION ================= */}
       <section className="relative pt-20 pb-10 md:min-h-[calc(100vh-5.25rem)] ">
@@ -181,8 +251,7 @@ const Home = () => {
           >
             <div className="w-full max-w-[30rem] ml-auto">
               <form
-                action="https://formsubmit.co/guglothmahipal@gmail.com"
-                method="POST"
+                onSubmit={handleSubmit}
                 className="relative space-y-4 border border-gray-300 dark:border-gray-700 rounded-2xl p-4 pt-10 md:p-5 md:pt-12 bg-white/45 dark:bg-black/10 shadow-[0_10px_30px_rgba(0,0,0,0.08)]"
               >
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 inline-flex items-center gap-2 rounded-full px-3 py-1.5 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700">
@@ -196,6 +265,7 @@ const Home = () => {
                 </div>
                 <input type="hidden" name="_subject" value="New Portfolio Inquiry" />
                 <input type="hidden" name="_captcha" value="false" />
+                <input type="hidden" name="_template" value="table" />
 
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -254,15 +324,15 @@ const Home = () => {
                     value={phoneInputValue ? `+${phoneDialCode} ${phoneInputValue}` : ""}
                   />
 
-                  <div className="relative">
+                  <div className="relative" ref={countryDropdownRef}>
                     <div className="flex items-center gap-1">
                       <button
                         type="button"
                         onClick={() => setIsCountryOpen((prev) => !prev)}
-                        className="w-[22%] h-[42px] rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-2 text-xs font-normal text-left flex items-center"
+                        className="w-[6rem] sm:w-[22%] h-[42px] rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-2 text-xs font-normal text-left flex-shrink-0 flex items-center justify-between whitespace-nowrap"
                       >
                         <span className="tracking-wide">{selectedPhoneCountry.iso} +{selectedPhoneCountry.dialCode}</span>
-                        <span className="ml-1 text-[10px] text-gray-500">v</span>
+                        <FaChevronDown className="ml-1 text-[10px] text-gray-500" />
                       </button>
 
                       <input
@@ -280,7 +350,7 @@ const Home = () => {
                     </div>
 
                     {isCountryOpen && (
-                      <div className="absolute left-0 z-20 mt-2 max-h-56 w-[22rem] overflow-y-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-xl">
+                      <div className="absolute left-0 z-20 mt-2 max-h-56 w-[min(20rem,calc(100vw-5rem))] sm:w-[22rem] max-w-[calc(100vw-2rem)] overflow-y-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-xl">
                         {phoneCountries.map((item) => (
                           <button
                             key={item.iso}
@@ -336,11 +406,23 @@ const Home = () => {
 
                 <button
                   type="submit"
-                  disabled={!isFormValid}
+                  disabled={!isFormValid || submitState === "sending"}
                   className="w-full rounded-xl bg-amber-600 text-white px-5 py-2.5 font-semibold hover:bg-amber-700 transition disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-amber-600"
                 >
-                  Get in Touch Today
+                  {submitState === "sending" ? "Submitting..." : "Get in Touch Today"}
                 </button>
+
+                {submitState !== "idle" && submitMessage && (
+                  <p
+                    className={`text-xs text-center ${
+                      submitState === "success"
+                        ? "text-emerald-600 dark:text-emerald-400"
+                        : "text-red-500"
+                    }`}
+                  >
+                    {submitMessage}
+                  </p>
+                )}
               </form>
             </div>
           </motion.div>
@@ -470,6 +552,24 @@ const Home = () => {
 };
 
 export default Home;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
