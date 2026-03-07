@@ -2,8 +2,6 @@ import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import webDevImage from "../assets/webdev.jpg";
 import { useMemo, useState } from "react";
-import PhoneInput from "react-phone-input-2";
-import "react-phone-input-2/lib/style.css";
 
 import {
   FaCode,
@@ -25,13 +23,40 @@ const Home = () => {
 
   const [phoneDialCode, setPhoneDialCode] = useState("91");
   const [phoneInputValue, setPhoneInputValue] = useState("");
-  const [phoneCountry, setPhoneCountry] = useState("in");
+  const [phoneCountry, setPhoneCountry] = useState("IN");
+  const [isCountryOpen, setIsCountryOpen] = useState(false);
+
+  const phoneCountries = [
+    { iso: "IN", name: "India", dialCode: "91" },
+    { iso: "US", name: "United States", dialCode: "1" },
+    { iso: "GB", name: "United Kingdom", dialCode: "44" },
+    { iso: "CA", name: "Canada", dialCode: "1" },
+    { iso: "DE", name: "Germany", dialCode: "49" },
+    { iso: "FR", name: "France", dialCode: "33" },
+    { iso: "IT", name: "Italy", dialCode: "39" },
+    { iso: "ES", name: "Spain", dialCode: "34" },
+    { iso: "NL", name: "Netherlands", dialCode: "31" },
+    { iso: "SE", name: "Sweden", dialCode: "46" },
+    { iso: "CH", name: "Switzerland", dialCode: "41" },
+    { iso: "AE", name: "United Arab Emirates", dialCode: "971" },
+    { iso: "SA", name: "Saudi Arabia", dialCode: "966" },
+    { iso: "SG", name: "Singapore", dialCode: "65" },
+    { iso: "MY", name: "Malaysia", dialCode: "60" },
+    { iso: "JP", name: "Japan", dialCode: "81" },
+    { iso: "KR", name: "South Korea", dialCode: "82" },
+    { iso: "AU", name: "Australia", dialCode: "61" },
+    { iso: "NZ", name: "New Zealand", dialCode: "64" },
+    { iso: "ZA", name: "South Africa", dialCode: "27" },
+    { iso: "BR", name: "Brazil", dialCode: "55" },
+  ];
+
+  const selectedPhoneCountry =
+    phoneCountries.find((item) => item.iso === phoneCountry) ?? phoneCountries[0];
 
   const isPhoneValid = useMemo(() => {
     const digits = phoneInputValue.replace(/\D/g, "");
-    const localDigits = digits.slice(phoneDialCode.length);
-    return localDigits.length >= 6;
-  }, [phoneDialCode, phoneInputValue]);
+    return digits.length >= 6;
+  }, [phoneInputValue]);
 
   const isFormValid = useMemo(
     () =>
@@ -57,6 +82,7 @@ const Home = () => {
     { name: "Tailwind CSS", color: "bg-cyan-500" },
     { name: "Framer Motion", color: "bg-pink-500" },
   ];
+
   return (
     <>      {/* ================= HERO SECTION ================= */}
       <section className="relative pt-20 pb-10 md:min-h-[calc(100vh-5.25rem)] ">
@@ -157,7 +183,7 @@ const Home = () => {
               <form
                 action="https://formsubmit.co/guglothmahipal@gmail.com"
                 method="POST"
-                className="relative space-y-3 border border-gray-300 dark:border-gray-700 rounded-2xl p-4 pt-10 md:p-5 md:pt-12 bg-white/45 dark:bg-black/10 shadow-[0_10px_30px_rgba(0,0,0,0.08)]"
+                className="relative space-y-4 border border-gray-300 dark:border-gray-700 rounded-2xl p-4 pt-10 md:p-5 md:pt-12 bg-white/45 dark:bg-black/10 shadow-[0_10px_30px_rgba(0,0,0,0.08)]"
               >
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 inline-flex items-center gap-2 rounded-full px-3 py-1.5 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700">
                   <span className="relative flex h-2.5 w-2.5">
@@ -171,11 +197,13 @@ const Home = () => {
                 <input type="hidden" name="_subject" value="New Portfolio Inquiry" />
                 <input type="hidden" name="_captcha" value="false" />
 
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="block text-xs font-medium mb-1.5 text-gray-700 dark:text-gray-300">First name</label>
                     <input
                       name="first_name"
+                      autoComplete="given-name"
                       required
                       placeholder="First name"
                       value={formValues.firstName}
@@ -189,6 +217,7 @@ const Home = () => {
                     <label className="block text-xs font-medium mb-1.5 text-gray-700 dark:text-gray-300">Last name</label>
                     <input
                       name="last_name"
+                      autoComplete="family-name"
                       required
                       placeholder="Last name"
                       value={formValues.lastName}
@@ -204,6 +233,7 @@ const Home = () => {
                   <label className="block text-xs font-medium mb-1.5 text-gray-700 dark:text-gray-300">Email</label>
                   <input
                     name="email"
+                    autoComplete="email"
                     type="email"
                     required
                     placeholder="you@company.com"
@@ -218,49 +248,60 @@ const Home = () => {
                 <div>
                   <label className="block text-xs font-medium mb-1.5 text-gray-700 dark:text-gray-300">Phone number</label>
                   <input type="hidden" name="country_code" value={`+${phoneDialCode}`} />
-                  <input type="hidden" name="phone" value={phoneInputValue ? `+${phoneInputValue}` : ""} />
-                  <div className="phone-input-wrap">
-                    <PhoneInput
-                      country={phoneCountry}
-                      value={phoneInputValue}
-                      onChange={(value, country) => {
-                        const dialCode =
-                          typeof country === "object" &&
-                          country &&
-                          "dialCode" in country &&
-                          typeof country.dialCode === "string"
-                            ? country.dialCode
-                            : "91";
-                        const nextCountry =
-                          typeof country === "object" &&
-                          country &&
-                          "countryCode" in country &&
-                          typeof country.countryCode === "string"
-                            ? country.countryCode
-                            : "in";
-                        setPhoneDialCode(dialCode);
-                        setPhoneCountry(nextCountry);
-                        setPhoneInputValue(value);
-                        setFormValues((prev) => ({ ...prev, phone: value }));
-                      }}
-                      enableSearch
-                      disableSearchIcon
-                      countryCodeEditable={false}
-                      inputProps={{ required: true }}
-                      inputClass="!w-full !h-[42px] !rounded-xl !border !border-gray-300 dark:!border-gray-700 !bg-transparent !text-sm !pl-[72px] !pr-3 !shadow-none focus:!border-violet-400"
-                      buttonClass="!w-[58px] !rounded-l-xl !border !border-r !border-gray-300 dark:!border-gray-700 !bg-white dark:!bg-gray-900 !px-1.5"
-                      dropdownClass="!rounded-xl !border !border-gray-200 dark:!border-gray-700 !shadow-xl"
-                      searchClass="!w-full !rounded-md"
-                      containerClass="!w-full"
-                      inputStyle={{ backgroundColor: "transparent" }}
-                      buttonStyle={{ borderRight: "1px solid #d1d5db" }}
-                      dropdownStyle={{ zIndex: 9999 }}
-                    />
+                  <input
+                    type="hidden"
+                    name="phone"
+                    value={phoneInputValue ? `+${phoneDialCode} ${phoneInputValue}` : ""}
+                  />
+
+                  <div className="relative">
+                    <div className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        onClick={() => setIsCountryOpen((prev) => !prev)}
+                        className="w-[22%] h-[42px] rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-2 text-xs font-normal text-left flex items-center"
+                      >
+                        <span className="tracking-wide">{selectedPhoneCountry.iso} +{selectedPhoneCountry.dialCode}</span>
+                        <span className="ml-1 text-[10px] text-gray-500">v</span>
+                      </button>
+
+                      <input
+                        required
+                        autoComplete="tel"
+                        inputMode="numeric"
+                        placeholder="98765 43210"
+                        value={phoneInputValue}
+                        onChange={(e) => {
+                          setPhoneInputValue(e.target.value);
+                          setFormValues((prev) => ({ ...prev, phone: e.target.value }));
+                        }}
+                        className="w-full h-[42px] rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent px-3 py-2.5 text-sm outline-none focus:border-violet-400"
+                      />
+                    </div>
+
+                    {isCountryOpen && (
+                      <div className="absolute left-0 z-20 mt-2 max-h-56 w-[22rem] overflow-y-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-xl">
+                        {phoneCountries.map((item) => (
+                          <button
+                            key={item.iso}
+                            type="button"
+                            onClick={() => {
+                              setPhoneCountry(item.iso);
+                              setPhoneDialCode(item.dialCode);
+                              setIsCountryOpen(false);
+                            }}
+                            className="flex w-full items-center justify-between px-3 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-800"
+                          >
+                            <span className="text-gray-700 dark:text-gray-200">{item.iso} {item.name}</span>
+                            <span className="font-medium text-gray-500 dark:text-gray-400">+{item.dialCode}</span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
+
                   {!isPhoneValid && formValues.phone.trim() !== "" && (
-                    <p className="mt-1 text-[11px] text-red-500">
-                      Enter a valid phone number.
-                    </p>
+                    <p className="mt-1 text-[11px] text-red-500">Enter a valid phone number.</p>
                   )}
                 </div>
 
@@ -268,6 +309,7 @@ const Home = () => {
                   <label className="block text-xs font-medium mb-1.5 text-gray-700 dark:text-gray-300">Message</label>
                   <textarea
                     name="message"
+                    rows={4}
                     required
                     placeholder="Tell me about your project"
                     value={formValues.message}
@@ -290,6 +332,7 @@ const Home = () => {
                   />
                   <span>I agree to your <Link to="/privacy-policy" className="underline underline-offset-2">privacy policy</Link>.</span>
                 </label>
+
 
                 <button
                   type="submit"
@@ -321,10 +364,10 @@ const Home = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65 }}
             viewport={{ once: true }}
-            className="relative overflow-hidden rounded-[2rem] border border-rose-200/40 bg-[linear-gradient(135deg,#da9db8_0%,#cf90b8_45%,#c38fc2_100%)] p-8 md:p-12 text-white shadow-[0_18px_48px_rgba(157,78,130,0.22)]"
+            className="relative overflow-hidden rounded-[2rem] border border-rose-300/70 bg-[linear-gradient(135deg,#da9db8_0%,#cf90b8_30%,#c38fc2_30%)] p-8 md:p-12 text-white shadow-[0_18px_48px_rgba(157,78,130,0.22)]"
           >
             <div className="pointer-events-none absolute inset-0">
-              <div className="absolute -top-24 -left-20 h-72 w-72 rounded-full bg-white/15 blur-3xl" />
+              <div className="absolute -top-24 -left-20 h-72 w-72 rounded-full bg-white/1 blur-2xl" />
               <div className="absolute -bottom-20 -right-16 h-72 w-72 rounded-full bg-purple-900/25 blur-3xl" />
             </div>
 
@@ -427,6 +470,24 @@ const Home = () => {
 };
 
 export default Home;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
