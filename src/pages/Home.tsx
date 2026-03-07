@@ -31,31 +31,32 @@ const Home = () => {
   const countryDropdownRef = useRef<HTMLDivElement | null>(null);
 
   const phoneCountries = [
-    { iso: "IN", name: "India", dialCode: "91" },
-    { iso: "US", name: "United States", dialCode: "1" },
-    { iso: "GB", name: "United Kingdom", dialCode: "44" },
-    { iso: "CA", name: "Canada", dialCode: "1" },
-    { iso: "DE", name: "Germany", dialCode: "49" },
-    { iso: "FR", name: "France", dialCode: "33" },
-    { iso: "IT", name: "Italy", dialCode: "39" },
-    { iso: "ES", name: "Spain", dialCode: "34" },
-    { iso: "NL", name: "Netherlands", dialCode: "31" },
-    { iso: "SE", name: "Sweden", dialCode: "46" },
-    { iso: "CH", name: "Switzerland", dialCode: "41" },
-    { iso: "AE", name: "United Arab Emirates", dialCode: "971" },
-    { iso: "SA", name: "Saudi Arabia", dialCode: "966" },
-    { iso: "SG", name: "Singapore", dialCode: "65" },
-    { iso: "MY", name: "Malaysia", dialCode: "60" },
-    { iso: "JP", name: "Japan", dialCode: "81" },
-    { iso: "KR", name: "South Korea", dialCode: "82" },
-    { iso: "AU", name: "Australia", dialCode: "61" },
-    { iso: "NZ", name: "New Zealand", dialCode: "64" },
-    { iso: "ZA", name: "South Africa", dialCode: "27" },
-    { iso: "BR", name: "Brazil", dialCode: "55" },
+    { iso: "IN", name: "India", dialCode: "91", phoneLength: 10 },
+    { iso: "US", name: "United States", dialCode: "1", phoneLength: 10 },
+    { iso: "GB", name: "United Kingdom", dialCode: "44", phoneLength: 10 },
+    { iso: "CA", name: "Canada", dialCode: "1", phoneLength: 10 },
+    { iso: "DE", name: "Germany", dialCode: "49", phoneLength: 11 },
+    { iso: "FR", name: "France", dialCode: "33", phoneLength: 9 },
+    { iso: "IT", name: "Italy", dialCode: "39", phoneLength: 10 },
+    { iso: "ES", name: "Spain", dialCode: "34", phoneLength: 9 },
+    { iso: "NL", name: "Netherlands", dialCode: "31", phoneLength: 9 },
+    { iso: "SE", name: "Sweden", dialCode: "46", phoneLength: 9 },
+    { iso: "CH", name: "Switzerland", dialCode: "41", phoneLength: 9 },
+    { iso: "AE", name: "United Arab Emirates", dialCode: "971", phoneLength: 9 },
+    { iso: "SA", name: "Saudi Arabia", dialCode: "966", phoneLength: 9 },
+    { iso: "SG", name: "Singapore", dialCode: "65", phoneLength: 8 },
+    { iso: "MY", name: "Malaysia", dialCode: "60", phoneLength: 9 },
+    { iso: "JP", name: "Japan", dialCode: "81", phoneLength: 10 },
+    { iso: "KR", name: "South Korea", dialCode: "82", phoneLength: 10 },
+    { iso: "AU", name: "Australia", dialCode: "61", phoneLength: 9 },
+    { iso: "NZ", name: "New Zealand", dialCode: "64", phoneLength: 9 },
+    { iso: "ZA", name: "South Africa", dialCode: "27", phoneLength: 9 },
+    { iso: "BR", name: "Brazil", dialCode: "55", phoneLength: 11 },
   ];
 
   const selectedPhoneCountry =
     phoneCountries.find((item) => item.iso === phoneCountry) ?? phoneCountries[0];
+  const selectedPhoneLength = selectedPhoneCountry.phoneLength;
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
@@ -71,20 +72,36 @@ const Home = () => {
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
 
+  useEffect(() => {
+    if (submitState !== "success" && submitState !== "error") return;
+
+    const timeout = setTimeout(() => {
+      setSubmitState("idle");
+      setSubmitMessage("");
+    }, 5000);
+
+    return () => clearTimeout(timeout);
+  }, [submitState]);
+
   const isPhoneValid = useMemo(() => {
     const digits = phoneInputValue.replace(/\D/g, "");
-    return digits.length >= 6;
-  }, [phoneInputValue]);
+    if (digits.length === 0) return true;
+    return digits.length === selectedPhoneLength;
+  }, [phoneInputValue, selectedPhoneLength]);
+
+  const isEmailValid = useMemo(
+    () => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formValues.email.trim()),
+    [formValues.email]
+  );
 
   const isFormValid = useMemo(
     () =>
       formValues.firstName.trim() !== "" &&
-      formValues.lastName.trim() !== "" &&
-      formValues.email.trim() !== "" &&
+      isEmailValid &&
       isPhoneValid &&
       formValues.message.trim() !== "" &&
       formValues.agreed,
-    [formValues, isPhoneValid]
+    [formValues, isPhoneValid, isEmailValid]
   );
 
 
@@ -270,7 +287,7 @@ const Home = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-medium mb-1.5 text-gray-700 dark:text-gray-300">First name</label>
+                    <label className="block text-xs font-medium mb-1.5 text-gray-700 dark:text-gray-300">First name *</label>
                     <input
                       name="first_name"
                       autoComplete="given-name"
@@ -288,7 +305,6 @@ const Home = () => {
                     <input
                       name="last_name"
                       autoComplete="family-name"
-                      required
                       placeholder="Last name"
                       value={formValues.lastName}
                       onChange={(e) =>
@@ -300,7 +316,7 @@ const Home = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium mb-1.5 text-gray-700 dark:text-gray-300">Email</label>
+                  <label className="block text-xs font-medium mb-1.5 text-gray-700 dark:text-gray-300">Email *</label>
                   <input
                     name="email"
                     autoComplete="email"
@@ -336,15 +352,16 @@ const Home = () => {
                       </button>
 
                       <input
-                        required
                         autoComplete="tel"
                         inputMode="numeric"
                         placeholder="98765 43210"
                         value={phoneInputValue}
                         onChange={(e) => {
-                          setPhoneInputValue(e.target.value);
-                          setFormValues((prev) => ({ ...prev, phone: e.target.value }));
+                          const digitsOnly = e.target.value.replace(/\D/g, "").slice(0, selectedPhoneLength);
+                          setPhoneInputValue(digitsOnly);
+                          setFormValues((prev) => ({ ...prev, phone: digitsOnly }));
                         }}
+                        maxLength={selectedPhoneLength}
                         className="w-full h-[42px] rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent px-3 py-2.5 text-sm outline-none focus:border-violet-400"
                       />
                     </div>
@@ -371,12 +388,14 @@ const Home = () => {
                   </div>
 
                   {!isPhoneValid && formValues.phone.trim() !== "" && (
-                    <p className="mt-1 text-[11px] text-red-500">Enter a valid phone number.</p>
+                    <p className="mt-1 text-[11px] text-red-500">
+                      Enter exactly {selectedPhoneLength} digits for {selectedPhoneCountry.name}.
+                    </p>
                   )}
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium mb-1.5 text-gray-700 dark:text-gray-300">Message</label>
+                  <label className="block text-xs font-medium mb-1.5 text-gray-700 dark:text-gray-300">Message *</label>
                   <textarea
                     name="message"
                     rows={4}
@@ -552,6 +571,19 @@ const Home = () => {
 };
 
 export default Home;
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
