@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import webDevImage from "../assets/webdev.jpg";
 
 import {
@@ -191,7 +191,7 @@ const Home = () => {
 
                 <label className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-400">
                   <input type="checkbox" required className="mt-0.5" />
-                  <span>I agree to your <a href="/privacy-policy" className="underline underline-offset-2">privacy policy</a>.</span>
+                  <span>I agree to your <Link to="/privacy-policy" className="underline underline-offset-2">privacy policy</Link>.</span>
                 </label>
 
                 <button
@@ -329,6 +329,7 @@ const Home = () => {
 };
 
 export default Home;
+
 
 
 
