@@ -448,14 +448,14 @@ const Home = () => {
         </div>
       </section>
       {/* ================= WHAT I DO SECTION ================= */}
-      <section className="py-24">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8">
+      <section className="py-14 md:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8">
           <motion.h2
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-3xl md:text-4xl font-bold mb-16 text-center"
+            className="text-3xl sm:text-4xl md:text-4xl font-bold mb-10 md:mb-16 text-center"
           >
             How <span className="google-color-cycle">I Help</span>
           </motion.h2>
@@ -465,22 +465,22 @@ const Home = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65 }}
             viewport={{ once: true }}
-            className="relative overflow-hidden rounded-[2rem] border border-rose-300/70 bg-[linear-gradient(135deg,#da9db8_0%,#cf90b8_30%,#c38fc2_30%)] p-8 md:p-12 text-white shadow-[0_18px_48px_rgba(157,78,130,0.22)]"
+            className="relative overflow-hidden rounded-[1.6rem] md:rounded-[2rem] border border-rose-300/70 bg-[linear-gradient(135deg,#da9db8_0%,#cf90b8_30%,#c38fc2_30%)] p-5 sm:p-6 md:p-12 text-white shadow-[0_18px_48px_rgba(157,78,130,0.22)]"
           >
             <div className="pointer-events-none absolute inset-0">
               <div className="absolute -top-24 -left-20 h-72 w-72 rounded-full bg-white/1 blur-2xl" />
               <div className="absolute -bottom-20 -right-16 h-72 w-72 rounded-full bg-purple-900/25 blur-3xl" />
             </div>
 
-            <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+            <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-10 items-center">
               <div>
                 <p className="text-xs uppercase tracking-[0.22em] text-white/80 mb-4">
                   Full-Stack + Cloud Services
                 </p>
-                <h3 className="text-4xl md:text-5xl font-semibold leading-tight mb-5">
+                <h3 className="text-4xl sm:text-4xl md:text-5xl font-semibold leading-tight mb-4 md:mb-5">
                   Build Faster. Ship Better.
                 </h3>
-                <p className="text-white/90 text-lg leading-relaxed max-w-xl mb-7">
+                <p className="text-white/90 text-base sm:text-lg leading-relaxed max-w-xl mb-5 md:mb-7">
                   I help founders and businesses design, build, and deploy
                   high-quality digital products with modern web engineering,
                   cloud architecture, and reliable delivery workflows.
@@ -499,8 +499,8 @@ const Home = () => {
                 </div>
               </div>
 
-              <div className="rounded-3xl bg-black/15 border border-white/10 p-5 md:p-6 backdrop-blur-sm">
-                <div className="rounded-2xl bg-white/95 text-gray-900 p-4 md:p-5 shadow-xl">
+              <div className="mt-4 sm:mt-0 rounded-3xl bg-black/15 border border-white/10 p-4 md:p-6 backdrop-blur-sm">
+                <div className="rounded-2xl bg-white/95 text-gray-900 p-3 sm:p-4 md:p-5 shadow-xl">
                   <div className="flex items-center gap-2 mb-4">
                     <span className="h-2.5 w-2.5 rounded-full bg-rose-400" />
                     <span className="h-2.5 w-2.5 rounded-full bg-amber-300" />
@@ -510,7 +510,7 @@ const Home = () => {
                   <img
                     src={webDevImage}
                     alt="Service showcase"
-                    className="w-full h-48 md:h-56 object-cover rounded-xl"
+                    className="w-full h-40 sm:h-48 md:h-56 object-cover rounded-xl"
                   />
 
                   <div className="mt-4 grid grid-cols-2 gap-3">
@@ -571,6 +571,9 @@ const Home = () => {
 };
 
 export default Home;
+
+
+
 
 
 

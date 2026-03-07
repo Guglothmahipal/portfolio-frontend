@@ -1,9 +1,21 @@
+import { type ComponentType } from "react";
 import { motion } from "framer-motion";
 import { FaCloud, FaCode, FaDatabase, FaPalette, FaTools } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useCart } from "../context/CartContext";
+import { useUser } from "../context/UserContext";
 
-const services = [
+type ServiceItem = {
+  id: string;
+  title: string;
+  description: string;
+  icon: ComponentType<{ className?: string }>;
+  bullets: string[];
+};
+
+const services: ServiceItem[] = [
   {
+    id: "web-development",
     title: "Web Development",
     description:
       "Modern responsive websites and landing pages with clean UI and strong performance.",
@@ -11,6 +23,7 @@ const services = [
     bullets: ["React + TypeScript", "SEO-ready pages", "Responsive design"],
   },
   {
+    id: "full-stack-apps",
     title: "Full-Stack Apps",
     description:
       "Business dashboards and custom applications with secure backend integration.",
@@ -18,6 +31,7 @@ const services = [
     bullets: ["REST API integration", "Authentication flows", "Scalable architecture"],
   },
   {
+    id: "cloud-deployment",
     title: "Cloud Deployment",
     description:
       "Deploy and scale apps on AWS or Google Cloud with production-friendly setup.",
@@ -25,6 +39,7 @@ const services = [
     bullets: ["CI/CD pipelines", "Monitoring basics", "Cost-aware setup"],
   },
   {
+    id: "ui-revamp",
     title: "UI Revamp",
     description:
       "Upgrade old interfaces into modern, accessible, and conversion-focused experiences.",
@@ -32,6 +47,7 @@ const services = [
     bullets: ["Design cleanup", "Component consistency", "Improved UX flow"],
   },
   {
+    id: "maintenance-fixes",
     title: "Maintenance & Fixes",
     description:
       "Ongoing support for bug fixes, speed improvements, and feature enhancements.",
@@ -42,6 +58,22 @@ const services = [
 
 const Services = () => {
   const navigate = useNavigate();
+  const { addItem } = useCart();
+  const { isAuthenticated } = useUser();
+
+  const handleAddToCart = (service: ServiceItem) => {
+    if (!isAuthenticated) {
+      navigate(`/auth?redirect=/services&service=${encodeURIComponent(service.title)}`);
+      return;
+    }
+
+    addItem({
+      id: service.id,
+      title: service.title,
+      description: service.description,
+    });
+    navigate("/cart");
+  };
 
   return (
     <section className="min-h-screen pt-28 pb-20">
@@ -79,11 +111,26 @@ const Services = () => {
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                   {service.description}
                 </p>
-                <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300 mb-6">
                   {service.bullets.map((bullet) => (
                     <li key={bullet}>- {bullet}</li>
                   ))}
                 </ul>
+
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => handleAddToCart(service)}
+                    className="flex-1 px-4 py-2.5 rounded-full font-semibold bg-black text-white border-2 border-black hover:bg-white hover:text-black dark:bg-white dark:text-black dark:border-white dark:hover:bg-black dark:hover:text-white transition"
+                  >
+                    Add to Cart
+                  </button>
+                  <button
+                    onClick={() => navigate("/contact")}
+                    className="px-4 py-2.5 rounded-full border border-gray-300 dark:border-gray-600"
+                  >
+                    Enquire
+                  </button>
+                </div>
               </motion.article>
             );
           })}
@@ -121,3 +168,5 @@ const Services = () => {
 };
 
 export default Services;
+
+

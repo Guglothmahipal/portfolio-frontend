@@ -11,12 +11,14 @@ import Services from "./pages/Services";
 import Contact from "./pages/Contact";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Login from "./pages/admin/Login";
+import Auth from "./pages/Auth";
+import Profile from "./pages/Profile";
+import Cart from "./pages/Cart";
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* PUBLIC ROUTES */}
         <Route element={<PublicLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/services" element={<Services />} />
@@ -25,9 +27,11 @@ const App = () => {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/cart" element={<Cart />} />
         </Route>
 
-        {/* ADMIN ROUTES */}
         <Route element={<AdminLayout />}>
           <Route path="/admin" element={<Login />} />
         </Route>
