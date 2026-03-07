@@ -42,7 +42,7 @@ const Navbar = () => {
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50">
-      <div className="relative flex items-center px-4 sm:px-6 lg:px-8 py-4 md:py-5 text-black dark:text-white">
+      <div ref={menuRef} className="relative flex items-center px-4 sm:px-6 lg:px-8 py-4 md:py-5 text-black dark:text-white">
         <div className="flex items-center gap-3">
           <button
             className="md:hidden p-1 text-xl"
@@ -84,7 +84,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        <div className="ml-auto flex items-center gap-3 md:gap-4 text-xl" ref={menuRef}>
+        <div className="ml-auto flex items-center gap-3 md:gap-4 text-xl">
           <button className="p-1" onClick={toggleTheme} aria-label="Toggle theme">
             {theme === "dark" ? <FiSun /> : <FiMoon />}
           </button>
@@ -155,5 +155,6 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
 
 
