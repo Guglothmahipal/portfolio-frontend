@@ -6,6 +6,7 @@
 html, body {
   width: 100%;
   overflow-x: hidden;
+  background-color: #f3f4f6;
 }
 
 /* ================= HIDE SCROLLBAR (GLOBAL) ================= */
@@ -68,3 +69,10 @@ body {
   80%  { border-color: #fbbc05; }  /* yellow */
   100% { border-color: #ff9800; }  /* back to orange */
 }
+
+
+.dark body {
+  background-color: #000000;
+}
+
+

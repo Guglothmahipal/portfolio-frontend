@@ -1,6 +1,9 @@
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import webDevImage from "../assets/webdev.jpg";
+import { useMemo, useState } from "react";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 
 import {
   FaCode,
@@ -11,6 +14,36 @@ import {
 
 const Home = () => {
   const navigate = useNavigate();
+  const [formValues, setFormValues] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    message: "",
+    agreed: false,
+  });
+
+  const [phoneDialCode, setPhoneDialCode] = useState("91");
+  const [phoneInputValue, setPhoneInputValue] = useState("");
+  const [phoneCountry, setPhoneCountry] = useState("in");
+
+  const isPhoneValid = useMemo(() => {
+    const digits = phoneInputValue.replace(/\D/g, "");
+    const localDigits = digits.slice(phoneDialCode.length);
+    return localDigits.length >= 6;
+  }, [phoneDialCode, phoneInputValue]);
+
+  const isFormValid = useMemo(
+    () =>
+      formValues.firstName.trim() !== "" &&
+      formValues.lastName.trim() !== "" &&
+      formValues.email.trim() !== "" &&
+      isPhoneValid &&
+      formValues.message.trim() !== "" &&
+      formValues.agreed,
+    [formValues, isPhoneValid]
+  );
+
   const marqueeSkills = [
     { name: "React", color: "bg-blue-500" },
     { name: "Next.js", color: "bg-black" },
@@ -24,7 +57,6 @@ const Home = () => {
     { name: "Tailwind CSS", color: "bg-cyan-500" },
     { name: "Framer Motion", color: "bg-pink-500" },
   ];
-
   return (
     <>      {/* ================= HERO SECTION ================= */}
       <section className="relative pt-20 pb-10 md:min-h-[calc(100vh-5.25rem)] ">
@@ -94,7 +126,7 @@ const Home = () => {
               </button>
             </div>
 
-            <div className="mt-7 grid grid-cols-3 gap-2 sm:gap-3 max-w-xl mb-6 md:mb-0">
+            <div className="mt-7 grid grid-cols-3 gap-2 sm:gap-3 max-w-xl mb-10 md:mb-0">
               {[
                 { value: "3+", label: "Years Experience" },
                 { value: "30+", label: "Projects" },
@@ -104,7 +136,7 @@ const Home = () => {
                   key={stat.label}
                   whileHover={{ y: -6, scale: 1.03 }}
                   transition={{ type: "spring", stiffness: 320, damping: 20 }}
-                  className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white/70 dark:bg-gray-900/60 px-3 py-3 sm:px-4 sm:py-4 shadow-sm"
+                  className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white/70 dark:bg-gray-900/60 px-3 py-3 sm:px-4 sm:py-4 shadow-[0_8px_22px_rgba(15,23,42,0.08)] dark:shadow-[0_10px_24px_rgba(0,0,0,0.35)]"
                 >
                   <p className="text-xl sm:text-2xl font-bold leading-none">{stat.value}</p>
                   <p className="mt-1.5 text-[10px] sm:text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">
@@ -119,7 +151,7 @@ const Home = () => {
             initial={{ opacity: 0, x: 60 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.9 }}
-            className="w-full md:justify-self-end md:pl-2"
+            className="w-full md:justify-self-end md:pl-2 md:mt-14"
           >
             <div className="w-full max-w-[30rem] ml-auto">
               <form
@@ -127,7 +159,7 @@ const Home = () => {
                 method="POST"
                 className="relative space-y-3 border border-gray-300 dark:border-gray-700 rounded-2xl p-4 pt-10 md:p-5 md:pt-12 bg-white/45 dark:bg-black/10 shadow-[0_10px_30px_rgba(0,0,0,0.08)]"
               >
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 md:left-auto md:right-4 md:translate-x-0 inline-flex items-center gap-2 rounded-full px-3 py-1.5 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 inline-flex items-center gap-2 rounded-full px-3 py-1.5 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700">
                   <span className="relative flex h-2.5 w-2.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
                     <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500" />
@@ -146,6 +178,10 @@ const Home = () => {
                       name="first_name"
                       required
                       placeholder="First name"
+                      value={formValues.firstName}
+                      onChange={(e) =>
+                        setFormValues((prev) => ({ ...prev, firstName: e.target.value }))
+                      }
                       className="w-full rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent px-3 py-2.5 text-sm outline-none focus:border-violet-400"
                     />
                   </div>
@@ -153,7 +189,12 @@ const Home = () => {
                     <label className="block text-xs font-medium mb-1.5 text-gray-700 dark:text-gray-300">Last name</label>
                     <input
                       name="last_name"
+                      required
                       placeholder="Last name"
+                      value={formValues.lastName}
+                      onChange={(e) =>
+                        setFormValues((prev) => ({ ...prev, lastName: e.target.value }))
+                      }
                       className="w-full rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent px-3 py-2.5 text-sm outline-none focus:border-violet-400"
                     />
                   </div>
@@ -166,17 +207,61 @@ const Home = () => {
                     type="email"
                     required
                     placeholder="you@company.com"
+                    value={formValues.email}
+                    onChange={(e) =>
+                      setFormValues((prev) => ({ ...prev, email: e.target.value }))
+                    }
                     className="w-full rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent px-3 py-2.5 text-sm outline-none focus:border-violet-400"
                   />
                 </div>
 
                 <div>
                   <label className="block text-xs font-medium mb-1.5 text-gray-700 dark:text-gray-300">Phone number</label>
-                  <input
-                    name="phone"
-                    placeholder="+1 (555) 000-0000"
-                    className="w-full rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent px-3 py-2.5 text-sm outline-none focus:border-violet-400"
-                  />
+                  <input type="hidden" name="country_code" value={`+${phoneDialCode}`} />
+                  <input type="hidden" name="phone" value={phoneInputValue ? `+${phoneInputValue}` : ""} />
+                  <div className="phone-input-wrap">
+                    <PhoneInput
+                      country={phoneCountry}
+                      value={phoneInputValue}
+                      onChange={(value, country) => {
+                        const dialCode =
+                          typeof country === "object" &&
+                          country &&
+                          "dialCode" in country &&
+                          typeof country.dialCode === "string"
+                            ? country.dialCode
+                            : "91";
+                        const nextCountry =
+                          typeof country === "object" &&
+                          country &&
+                          "countryCode" in country &&
+                          typeof country.countryCode === "string"
+                            ? country.countryCode
+                            : "in";
+                        setPhoneDialCode(dialCode);
+                        setPhoneCountry(nextCountry);
+                        setPhoneInputValue(value);
+                        setFormValues((prev) => ({ ...prev, phone: value }));
+                      }}
+                      enableSearch
+                      disableSearchIcon
+                      countryCodeEditable={false}
+                      inputProps={{ required: true }}
+                      inputClass="!w-full !h-[42px] !rounded-xl !border !border-gray-300 dark:!border-gray-700 !bg-transparent !text-sm !pl-[72px] !pr-3 !shadow-none focus:!border-violet-400"
+                      buttonClass="!w-[58px] !rounded-l-xl !border !border-r !border-gray-300 dark:!border-gray-700 !bg-white dark:!bg-gray-900 !px-1.5"
+                      dropdownClass="!rounded-xl !border !border-gray-200 dark:!border-gray-700 !shadow-xl"
+                      searchClass="!w-full !rounded-md"
+                      containerClass="!w-full"
+                      inputStyle={{ backgroundColor: "transparent" }}
+                      buttonStyle={{ borderRight: "1px solid #d1d5db" }}
+                      dropdownStyle={{ zIndex: 9999 }}
+                    />
+                  </div>
+                  {!isPhoneValid && formValues.phone.trim() !== "" && (
+                    <p className="mt-1 text-[11px] text-red-500">
+                      Enter a valid phone number.
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -185,18 +270,31 @@ const Home = () => {
                     name="message"
                     required
                     placeholder="Tell me about your project"
+                    value={formValues.message}
+                    onChange={(e) =>
+                      setFormValues((prev) => ({ ...prev, message: e.target.value }))
+                    }
                     className="w-full min-h-24 rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent px-3 py-2.5 text-sm outline-none focus:border-violet-400"
                   />
                 </div>
 
                 <label className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-400">
-                  <input type="checkbox" required className="mt-0.5" />
+                  <input
+                    type="checkbox"
+                    required
+                    checked={formValues.agreed}
+                    onChange={(e) =>
+                      setFormValues((prev) => ({ ...prev, agreed: e.target.checked }))
+                    }
+                    className="mt-0.5"
+                  />
                   <span>I agree to your <Link to="/privacy-policy" className="underline underline-offset-2">privacy policy</Link>.</span>
                 </label>
 
                 <button
                   type="submit"
-                  className="w-full rounded-xl bg-amber-600 text-white px-5 py-2.5 font-semibold hover:bg-amber-700 transition"
+                  disabled={!isFormValid}
+                  className="w-full rounded-xl bg-amber-600 text-white px-5 py-2.5 font-semibold hover:bg-amber-700 transition disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-amber-600"
                 >
                   Get in Touch Today
                 </button>
@@ -329,6 +427,30 @@ const Home = () => {
 };
 
 export default Home;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
