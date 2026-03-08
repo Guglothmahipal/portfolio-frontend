@@ -447,98 +447,135 @@ const Home = () => {
           </motion.div>
         </div>
       </section>
-      {/* ================= WHAT I DO SECTION ================= */}
-      <section className="py-14 md:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8">
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-3xl sm:text-4xl md:text-4xl font-bold mb-10 md:mb-16 text-center"
-          >
-            How <span className="google-color-cycle">I Help</span>
-          </motion.h2>
+     {/* ================= HOW I HELP SECTION ================= */}
+<section className="py-10 md:py-16">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65 }}
-            viewport={{ once: true }}
-            className="relative overflow-hidden rounded-[1.6rem] md:rounded-[2rem] border border-rose-300/70 bg-[linear-gradient(135deg,#da9db8_0%,#cf90b8_30%,#c38fc2_30%)] p-5 sm:p-6 md:p-12 text-white shadow-[0_18px_48px_rgba(157,78,130,0.22)]"
-          >
-            <div className="pointer-events-none absolute inset-0">
-              <div className="absolute -top-24 -left-20 h-72 w-72 rounded-full bg-white/1 blur-2xl" />
-              <div className="absolute -bottom-20 -right-16 h-72 w-72 rounded-full bg-purple-900/25 blur-3xl" />
-            </div>
+    <motion.h2
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.55 }}
+      viewport={{ once: true }}
+      className="text-3xl md:text-4xl font-bold mb-8 md:mb-12 text-center"
+    >
+      How <span className="google-color-cycle">I Help</span>
+    </motion.h2>
 
-            <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-10 items-center">
-              <div>
-                <p className="text-xs uppercase tracking-[0.22em] text-white/80 mb-4">
-                  Full-Stack + Cloud Services
-                </p>
-                <h3 className="text-4xl sm:text-4xl md:text-5xl font-semibold leading-tight mb-4 md:mb-5">
-                  Build Faster. Ship Better.
-                </h3>
-                <p className="text-white/90 text-base sm:text-lg leading-relaxed max-w-xl mb-5 md:mb-7">
-                  I help founders and businesses design, build, and deploy
-                  high-quality digital products with modern web engineering,
-                  cloud architecture, and reliable delivery workflows.
-                </p>
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.65 }}
+      viewport={{ once: true }}
+      className="rounded-3xl bg-gradient-to-r from-purple-400 to-pink-400 p-4 sm:p-6 md:p-12 text-white shadow-[0_18px_48px_rgba(157,78,130,0.22)]"
+    >
 
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 rounded-full bg-white/20 border border-white/30 text-sm font-medium">
-                    Web Apps
-                  </span>
-                  <span className="px-4 py-2 rounded-full bg-white/20 border border-white/30 text-sm font-medium">
-                    Cloud Deployments
-                  </span>
-                  <span className="px-4 py-2 rounded-full bg-white/20 border border-white/30 text-sm font-medium">
-                    Freelance Solutions
-                  </span>
-                </div>
-              </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
 
-              <div className="mt-4 sm:mt-0 rounded-3xl bg-black/15 border border-white/10 p-4 md:p-6 backdrop-blur-sm">
-                <div className="rounded-2xl bg-white/95 text-gray-900 p-3 sm:p-4 md:p-5 shadow-xl">
-                  <div className="flex items-center gap-2 mb-4">
-                    <span className="h-2.5 w-2.5 rounded-full bg-rose-400" />
-                    <span className="h-2.5 w-2.5 rounded-full bg-amber-300" />
-                    <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
-                  </div>
+        {/* LEFT TEXT */}
+        <div>
+          <p className="text-xs md:text-sm tracking-widest uppercase opacity-80">
+            Full-Stack + Cloud Services
+          </p>
 
-                  <img
-                    src={webDevImage}
-                    alt="Service showcase"
-                    className="w-full h-40 sm:h-48 md:h-56 object-cover rounded-xl"
-                  />
+          <h3 className="text-2xl md:text-4xl font-bold mt-2">
+            Build Faster. Ship Better.
+          </h3>
 
-                  <div className="mt-4 grid grid-cols-2 gap-3">
-                    <div className="rounded-lg bg-rose-50 px-3 py-2 text-sm font-medium text-rose-700 flex items-center gap-2">
-                      <FaCode className="text-rose-500" />
-                      Development
-                    </div>
-                    <div className="rounded-lg bg-sky-50 px-3 py-2 text-sm font-medium text-sky-700 flex items-center gap-2">
-                      <FaCloud className="text-sky-500" />
-                      Deployment
-                    </div>
-                    <div className="rounded-lg bg-violet-50 px-3 py-2 text-sm font-medium text-violet-700 flex items-center gap-2">
-                      <FaProjectDiagram className="text-violet-500" />
-                      Consulting
-                    </div>
-                    <div className="rounded-lg bg-amber-50 px-3 py-2 text-sm font-medium text-amber-700 flex items-center gap-2">
-                      <FaLaptopCode className="text-amber-500" />
-                      UI/UX Fixes
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
+          <p className="mt-4 text-sm md:text-base opacity-90 max-w-xl">
+            I help founders and businesses design, build, and deploy
+            high-quality digital products with modern web engineering,
+            cloud architecture, and reliable delivery workflows.
+          </p>
+
+          <div className="flex flex-wrap gap-3 mt-6">
+            <span className="px-4 py-2 rounded-full bg-white/20 border border-white/30 text-sm font-medium">
+              Web Apps
+            </span>
+
+            <span className="px-4 py-2 rounded-full bg-white/20 border border-white/30 text-sm font-medium">
+              Cloud Deployments
+            </span>
+
+            <span className="px-4 py-2 rounded-full bg-white/20 border border-white/30 text-sm font-medium">
+              Freelance Solutions
+            </span>
+          </div>
         </div>
-      </section>
 
-      {/* ================= SKILLS MARQUEE ================= */}
+        {/* RIGHT MINI CARD */}
+        <div className="flex justify-center md:justify-end">
+
+          <div className="
+            w-full
+            max-w-[clamp(260px,80vw,420px)]
+            aspect-[16/12]
+            rounded-xl
+            bg-white/95
+            text-gray-900
+            p-3 md:p-5
+            shadow-xl
+            flex flex-col
+          ">
+
+            {/* browser dots */}
+            <div className="flex items-center gap-2 mb-2">
+              <span className="h-2.5 w-2.5 rounded-full bg-rose-400"/>
+              <span className="h-2.5 w-2.5 rounded-full bg-amber-300"/>
+              <span className="h-2.5 w-2.5 rounded-full bg-emerald-400"/>
+            </div>
+
+            {/* IMAGE CONTAINER */}
+            <div className="
+              flex-1
+              rounded-md
+              border border-gray-200
+              bg-gray-50
+              p-2
+              overflow-hidden
+            ">
+              <img
+                src={webDevImage}
+                alt="Service showcase"
+                className="w-full h-full object-contain rounded-sm"
+              />
+            </div>
+
+            {/* FEATURES */}
+            <div className="mt-3 grid grid-cols-2 gap-2 text-[11px] md:text-sm">
+
+              <div className="rounded-lg bg-rose-50 px-2 py-1.5 md:px-3 md:py-2 font-medium text-rose-700 flex items-center gap-1.5">
+                <FaCode className="text-rose-500 text-xs"/>
+                Development
+              </div>
+
+              <div className="rounded-lg bg-sky-50 px-2 py-1.5 md:px-3 md:py-2 font-medium text-sky-700 flex items-center gap-1.5">
+                <FaCloud className="text-sky-500 text-xs"/>
+                Deployment
+              </div>
+
+              <div className="rounded-lg bg-violet-50 px-2 py-1.5 md:px-3 md:py-2 font-medium text-violet-700 flex items-center gap-1.5">
+                <FaProjectDiagram className="text-violet-500 text-xs"/>
+                Consulting
+              </div>
+
+              <div className="rounded-lg bg-amber-50 px-2 py-1.5 md:px-3 md:py-2 font-medium text-amber-700 flex items-center gap-1.5">
+                <FaLaptopCode className="text-amber-500 text-xs"/>
+                UI/UX Fixes
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </motion.div>
+
+  </div>
+</section>
+ {/* ================= SKILLS MARQUEE ================= */}
       <section className="py-12 md:py-16 overflow-hidden border-y border-gray-200 dark:border-gray-800 bg-gradient-to-r from-gray-50/70 via-transparent to-gray-50/70 dark:from-gray-900/40 dark:via-transparent dark:to-gray-900/40">
         <div className="max-w-7xl mx-auto px-6 sm:px-8 mb-8">
           <h3 className="text-xl md:text-2xl font-semibold text-center">
@@ -571,6 +608,7 @@ const Home = () => {
 };
 
 export default Home;
+
 
 
 
