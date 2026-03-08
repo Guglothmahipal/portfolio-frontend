@@ -1,7 +1,10 @@
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
-import webDevImage from "../assets/webdev.jpg";
+import webCloudImage from "../assets/webcloud.png";
+import cloudComputeImage from "../assets/cloudcompute.png";
+import freelanceImage from "../assets/Freelance.png";
 import { type FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import type { IconType } from "react-icons";
 
 import {
   FaCode,
@@ -9,6 +12,10 @@ import {
   FaProjectDiagram,
   FaLaptopCode,
   FaChevronDown,
+  FaMobileAlt,
+  FaServer,
+  FaTools,
+  FaUsers,
 } from "react-icons/fa";
 
 const Home = () => {
@@ -28,7 +35,55 @@ const Home = () => {
   const [isCountryOpen, setIsCountryOpen] = useState(false);
   const [submitState, setSubmitState] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [submitMessage, setSubmitMessage] = useState("");
+  const [activeService, setActiveService] = useState(0);
+  const [isMobileView, setIsMobileView] = useState(false);
   const countryDropdownRef = useRef<HTMLDivElement | null>(null);
+
+  const rotatingServices: {
+    title: string;
+    description: string;
+    image: string;
+    features: { label: string; icon: IconType; className: string; iconClass: string }[];
+  }[] = [
+    {
+      title: "Web & App Development",
+      description:
+        "I build scalable web and application experiences with clean architecture, modern UI, and reliable performance.",
+      image: webCloudImage,
+      features: [
+        { label: "Web Development", icon: FaCode, className: "rounded-lg bg-rose-50 px-2 py-1.5 md:px-3 md:py-2 font-medium text-rose-700 flex items-center gap-1.5", iconClass: "text-rose-500 text-xs" },
+        { label: "App Development", icon: FaMobileAlt, className: "rounded-lg bg-sky-50 px-2 py-1.5 md:px-3 md:py-2 font-medium text-sky-700 flex items-center gap-1.5", iconClass: "text-sky-500 text-xs" },
+        { label: "API Integration", icon: FaProjectDiagram, className: "rounded-lg bg-violet-50 px-2 py-1.5 md:px-3 md:py-2 font-medium text-violet-700 flex items-center gap-1.5", iconClass: "text-violet-500 text-xs" },
+        { label: "UI/UX Fixes", icon: FaLaptopCode, className: "rounded-lg bg-amber-50 px-2 py-1.5 md:px-3 md:py-2 font-medium text-amber-700 flex items-center gap-1.5", iconClass: "text-amber-500 text-xs" },
+      ],
+    },
+    {
+      title: "Cloud Computing & Deployment",
+      description:
+        "I design and deploy cloud-ready systems with CI/CD, observability, and production-grade delivery workflows.",
+      image: cloudComputeImage,
+      features: [
+        { label: "Cloud Setup", icon: FaCloud, className: "rounded-lg bg-sky-50 px-2 py-1.5 md:px-3 md:py-2 font-medium text-sky-700 flex items-center gap-1.5", iconClass: "text-sky-500 text-xs" },
+        { label: "Server Ops", icon: FaServer, className: "rounded-lg bg-rose-50 px-2 py-1.5 md:px-3 md:py-2 font-medium text-rose-700 flex items-center gap-1.5", iconClass: "text-rose-500 text-xs" },
+        { label: "Monitoring", icon: FaProjectDiagram, className: "rounded-lg bg-violet-50 px-2 py-1.5 md:px-3 md:py-2 font-medium text-violet-700 flex items-center gap-1.5", iconClass: "text-violet-500 text-xs" },
+        { label: "Optimization", icon: FaTools, className: "rounded-lg bg-amber-50 px-2 py-1.5 md:px-3 md:py-2 font-medium text-amber-700 flex items-center gap-1.5", iconClass: "text-amber-500 text-xs" },
+      ],
+    },
+    {
+      title: "Freelance Digital Services",
+      description:
+        "I provide freelance digital support across development, deployment, and growth-focused technical execution.",
+      image: freelanceImage,
+      features: [
+        { label: "Freelance Build", icon: FaCode, className: "rounded-lg bg-rose-50 px-2 py-1.5 md:px-3 md:py-2 font-medium text-rose-700 flex items-center gap-1.5", iconClass: "text-rose-500 text-xs" },
+        { label: "Quick Delivery", icon: FaCloud, className: "rounded-lg bg-sky-50 px-2 py-1.5 md:px-3 md:py-2 font-medium text-sky-700 flex items-center gap-1.5", iconClass: "text-sky-500 text-xs" },
+        { label: "Client Support", icon: FaUsers, className: "rounded-lg bg-violet-50 px-2 py-1.5 md:px-3 md:py-2 font-medium text-violet-700 flex items-center gap-1.5", iconClass: "text-violet-500 text-xs" },
+        { label: "Service Consulting", icon: FaLaptopCode, className: "rounded-lg bg-amber-50 px-2 py-1.5 md:px-3 md:py-2 font-medium text-amber-700 flex items-center gap-1.5", iconClass: "text-amber-500 text-xs" },
+      ],
+    },
+  ];
+
+  const activeServiceData = rotatingServices[activeService];
 
   const phoneCountries = [
     { iso: "IN", name: "India", dialCode: "91", phoneLength: 10 },
@@ -71,6 +126,13 @@ const Home = () => {
     document.addEventListener("mousedown", handleOutsideClick);
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
+  useEffect(() => {
+    const updateViewport = () => setIsMobileView(window.innerWidth < 768);
+    updateViewport();
+    window.addEventListener("resize", updateViewport);
+    return () => window.removeEventListener("resize", updateViewport);
+  }, []);
+
 
   useEffect(() => {
     if (submitState !== "success" && submitState !== "error") return;
@@ -82,6 +144,14 @@ const Home = () => {
 
     return () => clearTimeout(timeout);
   }, [submitState]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveService((prev) => (prev + 1) % rotatingServices.length);
+    }, 3800);
+
+    return () => clearInterval(interval);
+  }, [rotatingServices.length]);
 
   const isPhoneValid = useMemo(() => {
     const digits = phoneInputValue.replace(/\D/g, "");
@@ -261,8 +331,8 @@ const Home = () => {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: 60 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={isMobileView ? { opacity: 0, y: 40 } : { opacity: 0, x: 60 }}
+            animate={isMobileView ? { opacity: 1, y: 0 } : { opacity: 1, x: 0 }}
             transition={{ duration: 0.9 }}
             className="w-full md:justify-self-end md:pl-2 md:mt-14"
           >
@@ -433,11 +503,10 @@ const Home = () => {
 
                 {submitState !== "idle" && submitMessage && (
                   <p
-                    className={`text-xs text-center ${
-                      submitState === "success"
-                        ? "text-emerald-600 dark:text-emerald-400"
-                        : "text-red-500"
-                    }`}
+                    className={`text-xs text-center ${submitState === "success"
+                      ? "text-emerald-600 dark:text-emerald-400"
+                      : "text-red-500"
+                      }`}
                   >
                     {submitMessage}
                   </p>
@@ -447,135 +516,126 @@ const Home = () => {
           </motion.div>
         </div>
       </section>
-     {/* ================= HOW I HELP SECTION ================= */}
-<section className="py-10 md:py-16">
-  <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      {/* ================= HOW I HELP SECTION ================= */}
+      <section className="py-10 md:py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55 }}
+            viewport={{ once: true }}
+            className="text-3xl md:text-4xl font-bold mb-8 md:mb-12 text-center"
+          >
+            How <span className="google-color-cycle">I Help</span>
+          </motion.h2>
 
-    <motion.h2
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.55 }}
-      viewport={{ once: true }}
-      className="text-3xl md:text-4xl font-bold mb-8 md:mb-12 text-center"
-    >
-      How <span className="google-color-cycle">I Help</span>
-    </motion.h2>
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65 }}
+            viewport={{ once: true }}
+            className="rounded-3xl bg-gradient-to-r from-purple-400 to-pink-400 p-4 sm:p-6 md:p-12 text-white shadow-[0_18px_48px_rgba(157,78,130,0.22)]"
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+              <div className="order-2 md:order-1">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeService}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.35 }}
+                  >
+                    <h3 className="text-2xl md:text-4xl font-bold mt-2">
+                      {activeServiceData.title}
+                    </h3>
 
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.65 }}
-      viewport={{ once: true }}
-      className="rounded-3xl bg-gradient-to-r from-purple-400 to-pink-400 p-4 sm:p-6 md:p-12 text-white shadow-[0_18px_48px_rgba(157,78,130,0.22)]"
-    >
+                    <p className="mt-4 text-sm md:text-base opacity-90 max-w-xl">
+                      {activeServiceData.description}
+                    </p>
+                  </motion.div>
+                </AnimatePresence>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div className="flex flex-wrap gap-3 mt-6">
+                  <span className="px-4 py-2 rounded-full bg-white/20 border border-white/30 text-sm font-medium">
+                    Web Apps
+                  </span>
+                  <span className="px-4 py-2 rounded-full bg-white/20 border border-white/30 text-sm font-medium">
+                    Cloud Deployments
+                  </span>
+                  <span className="px-4 py-2 rounded-full bg-white/20 border border-white/30 text-sm font-medium">
+                    Freelance Solutions
+                  </span>
+                </div>
+              </div>
 
-        {/* LEFT TEXT */}
-        <div>
-          <p className="text-xs md:text-sm tracking-widest uppercase opacity-80">
-            Full-Stack + Cloud Services
-          </p>
+              <div className="order-1 md:order-2 flex justify-center md:justify-end">
+                <div
+                  className="
+                    w-full
+                    max-w-[clamp(260px,80vw,420px)]
+                    rounded-xl
+                    bg-white/95
+                    text-gray-900
+                    p-3 md:p-5
+                    shadow-xl
+                  "
+                >
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="h-2.5 w-2.5 rounded-full bg-rose-400" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-amber-300" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
+                  </div>
 
-          <h3 className="text-2xl md:text-4xl font-bold mt-2">
-            Build Faster. Ship Better.
-          </h3>
+                  <div
+                    className="
+                      aspect-[16/9]
+                      rounded-md
+                      border border-gray-250
+                      overflow-hidden
+                    "
+                  >
+                    <AnimatePresence mode="wait">
+                      <motion.img
+                        key={activeServiceData.image}
+                        src={activeServiceData.image}
+                        alt={activeServiceData.title}
+                        className="w-full h-full object-cover"
+                        initial={{ opacity: 0, scale: 0.98 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 1.02 }}
+                        transition={{ duration: 0.4 }}
+                      />
+                    </AnimatePresence>
+                  </div>
 
-          <p className="mt-4 text-sm md:text-base opacity-90 max-w-xl">
-            I help founders and businesses design, build, and deploy
-            high-quality digital products with modern web engineering,
-            cloud architecture, and reliable delivery workflows.
-          </p>
-
-          <div className="flex flex-wrap gap-3 mt-6">
-            <span className="px-4 py-2 rounded-full bg-white/20 border border-white/30 text-sm font-medium">
-              Web Apps
-            </span>
-
-            <span className="px-4 py-2 rounded-full bg-white/20 border border-white/30 text-sm font-medium">
-              Cloud Deployments
-            </span>
-
-            <span className="px-4 py-2 rounded-full bg-white/20 border border-white/30 text-sm font-medium">
-              Freelance Solutions
-            </span>
-          </div>
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={`features-${activeService}`}
+                      className="mt-3 grid grid-cols-2 gap-2 text-[11px] md:text-sm"
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -6 }}
+                      transition={{ duration: 0.35 }}
+                    >
+                      {activeServiceData.features.map((feature) => {
+                        const Icon = feature.icon;
+                        return (
+                          <div key={feature.label} className={feature.className}>
+                            <Icon className={feature.iconClass} />
+                            {feature.label}
+                          </div>
+                        );
+                      })}
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
-
-        {/* RIGHT MINI CARD */}
-        <div className="flex justify-center md:justify-end">
-
-          <div className="
-            w-full
-            max-w-[clamp(260px,80vw,420px)]
-            aspect-[16/12]
-            rounded-xl
-            bg-white/95
-            text-gray-900
-            p-3 md:p-5
-            shadow-xl
-            flex flex-col
-          ">
-
-            {/* browser dots */}
-            <div className="flex items-center gap-2 mb-2">
-              <span className="h-2.5 w-2.5 rounded-full bg-rose-400"/>
-              <span className="h-2.5 w-2.5 rounded-full bg-amber-300"/>
-              <span className="h-2.5 w-2.5 rounded-full bg-emerald-400"/>
-            </div>
-
-            {/* IMAGE CONTAINER */}
-            <div className="
-              flex-1
-              rounded-md
-              border border-gray-200
-              bg-gray-50
-              p-2
-              overflow-hidden
-            ">
-              <img
-                src={webDevImage}
-                alt="Service showcase"
-                className="w-full h-full object-contain rounded-sm"
-              />
-            </div>
-
-            {/* FEATURES */}
-            <div className="mt-3 grid grid-cols-2 gap-2 text-[11px] md:text-sm">
-
-              <div className="rounded-lg bg-rose-50 px-2 py-1.5 md:px-3 md:py-2 font-medium text-rose-700 flex items-center gap-1.5">
-                <FaCode className="text-rose-500 text-xs"/>
-                Development
-              </div>
-
-              <div className="rounded-lg bg-sky-50 px-2 py-1.5 md:px-3 md:py-2 font-medium text-sky-700 flex items-center gap-1.5">
-                <FaCloud className="text-sky-500 text-xs"/>
-                Deployment
-              </div>
-
-              <div className="rounded-lg bg-violet-50 px-2 py-1.5 md:px-3 md:py-2 font-medium text-violet-700 flex items-center gap-1.5">
-                <FaProjectDiagram className="text-violet-500 text-xs"/>
-                Consulting
-              </div>
-
-              <div className="rounded-lg bg-amber-50 px-2 py-1.5 md:px-3 md:py-2 font-medium text-amber-700 flex items-center gap-1.5">
-                <FaLaptopCode className="text-amber-500 text-xs"/>
-                UI/UX Fixes
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </motion.div>
-
-  </div>
-</section>
- {/* ================= SKILLS MARQUEE ================= */}
+      </section>
+      {/* ================= SKILLS MARQUEE ================= */}
       <section className="py-12 md:py-16 overflow-hidden border-y border-gray-200 dark:border-gray-800 bg-gradient-to-r from-gray-50/70 via-transparent to-gray-50/70 dark:from-gray-900/40 dark:via-transparent dark:to-gray-900/40">
         <div className="max-w-7xl mx-auto px-6 sm:px-8 mb-8">
           <h3 className="text-xl md:text-2xl font-semibold text-center">
@@ -590,7 +650,7 @@ const Home = () => {
           <div className="pointer-events-none absolute left-0 top-0 h-full w-16 bg-gradient-to-r from-white dark:from-black to-transparent z-10" />
           <div className="pointer-events-none absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-white dark:from-black to-transparent z-10" />
 
-          <div className="flex w-max animate-marquee gap-6 md:gap-8">
+          <div className="flex w-max animate-marquee gap-6 md:gap-8 hover:[animation-play-state:paused]">
             {[...marqueeSkills, ...marqueeSkills].map((skill, index) => (
               <div
                 key={index}
@@ -608,77 +668,6 @@ const Home = () => {
 };
 
 export default Home;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
