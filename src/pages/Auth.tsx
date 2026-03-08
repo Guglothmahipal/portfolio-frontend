@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
-import { useCart } from "../context/CartContext";
+import { useCart, type CartItem } from "../context/CartContext";
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -16,6 +16,7 @@ const Auth = () => {
 
   const params = useMemo(() => new URLSearchParams(location.search), [location.search]);
   const redirectPath = params.get("redirect") || "/services";
+  const pendingCartItemParam = params.get("pendingCartItem");
   const pendingService = params.get("service");
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -24,12 +25,40 @@ const Auth = () => {
     const finalName = (mode === "register" ? name : email.split("@")[0]).trim() || "User";
     login({ name: finalName, email: email.trim() });
 
+    if (pendingCartItemParam) {
+      try {
+        const parsed = JSON.parse(pendingCartItemParam) as CartItem;
+        addItem(parsed);
+        navigate("/cart");
+        return;
+      } catch {
+        navigate(redirectPath);
+        return;
+      }
+    }
+
     if (pendingService) {
-      addItem({
-        id: pendingService,
+      const fallbackItem: CartItem = {
+        id: `legacy-${Date.now()}`,
+        audience: "business",
+        serviceCategory: pendingService,
+        packageName: "Basic",
+        basePrice: 0,
+        totalPrice: 0,
+        deliveryTime: "TBD",
+        features: ["Added from service selection"],
+        configuration: {
+          hostingRequired: false,
+          domainRequired: false,
+          preferredTechStack: "React + Node.js",
+          databaseRequirement: "none",
+          deploymentRequired: false,
+        },
         title: pendingService,
         description: "Added from services page",
-      });
+      };
+
+      addItem(fallbackItem);
       navigate("/cart");
       return;
     }

@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import PublicLayout from "./layouts/PublicLayout";
-import AdminLayout from "./layouts/AdminLayout";
 
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -10,7 +9,6 @@ import Products from "./pages/Products";
 import Services from "./pages/Services";
 import Contact from "./pages/Contact";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
-import Login from "./pages/admin/Login";
 import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
 import Cart from "./pages/Cart";
@@ -30,10 +28,6 @@ const App = () => {
           <Route path="/auth" element={<Auth />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/cart" element={<Cart />} />
-        </Route>
-
-        <Route element={<AdminLayout />}>
-          <Route path="/admin" element={<Login />} />
         </Route>
       </Routes>
     </BrowserRouter>

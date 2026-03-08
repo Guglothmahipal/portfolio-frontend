@@ -1,19 +1,46 @@
-import { useState, useEffect, useRef } from "react";
-import { NavLink, Link, useNavigate } from "react-router-dom";
-import { FiMenu, FiMoon, FiSun, FiUser, FiShoppingCart, FiX } from "react-icons/fi";
+import { useState, useEffect, useRef, useMemo } from "react";
+import { NavLink, Link, useNavigate, useLocation } from "react-router-dom";
+import { FiHome, FiMenu, FiMoon, FiSun, FiUser, FiShoppingCart, FiX } from "react-icons/fi";
 import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 import { useTheme } from "../context/ThemeContext";
 import { useUser } from "../context/UserContext";
 import { useCart } from "../context/CartContext";
 
+const routeLabels: Record<string, string> = {
+  services: "Services",
+  products: "Products",
+  projects: "Projects",
+  about: "About",
+  contact: "Contact",
+  "privacy-policy": "Privacy Policy",
+  auth: "Auth",
+  profile: "Profile",
+  cart: "Cart",
+};
+
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const { theme, toggleTheme } = useTheme();
   const { isAuthenticated } = useUser();
   const { items } = useCart();
+
+  const isHome = location.pathname === "/";
+
+  const breadcrumbs = useMemo(() => {
+    const segments = location.pathname.split("/").filter(Boolean);
+
+    return segments.map((segment, index) => {
+      const href = `/${segments.slice(0, index + 1).join("/")}`;
+      return {
+        href,
+        label: routeLabels[segment] || segment.replace(/-/g, " "),
+      };
+    });
+  }, [location.pathname]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -31,6 +58,10 @@ const Navbar = () => {
     };
   }, [open]);
 
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
+
   const navItems = [
     { name: "Home", path: "/" },
     { name: "Services", path: "/services" },
@@ -39,6 +70,66 @@ const Navbar = () => {
     { name: "About", path: "/about" },
     { name: "Contact", path: "/contact" },
   ];
+
+  if (!isHome) {
+    return (
+      <nav className="fixed top-0 left-0 w-full z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 text-black dark:text-white">
+          <div className="flex items-center justify-between gap-3">
+            <Link to="/" className="text-lg tracking-widest uppercase font-semibold">
+              Mahipal
+            </Link>
+
+            <div className="flex items-center gap-2 sm:gap-3 text-lg">
+              <button className="p-1" onClick={toggleTheme} aria-label="Toggle theme">
+                {theme === "dark" ? <FiSun /> : <FiMoon />}
+              </button>
+
+              <button
+                className="relative p-1"
+                onClick={() => navigate(isAuthenticated ? "/profile" : "/auth?redirect=/profile")}
+                aria-label="Profile"
+              >
+                <FiUser />
+              </button>
+
+              {isAuthenticated && (
+                <button className="relative p-1" onClick={() => navigate("/cart")} aria-label="Cart">
+                  <FiShoppingCart />
+                  {items.length > 0 && (
+                    <span className="absolute -top-1.5 -right-1.5 h-4 min-w-4 px-1 rounded-full bg-orange-500 text-[10px] leading-4 text-white text-center">
+                      {items.length}
+                    </span>
+                  )}
+                </button>
+              )}
+            </div>
+          </div>
+
+          <div className="mt-2 flex items-center gap-2 text-base sm:text-[1.05rem]">
+            <Link to="/" aria-label="Home" className="inline-flex items-center hover:text-orange-500 transition">
+              <FiHome className="text-sm" />
+            </Link>
+
+            {breadcrumbs.map((crumb, index) => (
+              <div key={crumb.href} className="flex items-center gap-2 min-w-0">
+                <span className="text-gray-400">/</span>
+                {index === breadcrumbs.length - 1 ? (
+                  <span className="font-medium whitespace-nowrap truncate max-w-[10rem] sm:max-w-none">
+                    {crumb.label}
+                  </span>
+                ) : (
+                  <Link to={crumb.href} className="text-gray-600 dark:text-gray-300 hover:text-orange-500 transition">
+                    {crumb.label}
+                  </Link>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </nav>
+    );
+  }
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50">
@@ -155,6 +246,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-
-
