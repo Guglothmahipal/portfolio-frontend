@@ -36,14 +36,13 @@ const Home = () => {
   const [submitState, setSubmitState] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [submitMessage, setSubmitMessage] = useState("");
   const [activeService, setActiveService] = useState(0);
-  const [isMobileView, setIsMobileView] = useState(false);
-  const countryDropdownRef = useRef<HTMLDivElement | null>(null);
-
-  const rotatingServices: {
+  const countryDropdownRef = useRef<HTMLDivElement | null>(null);  const rotatingServices: {
     title: string;
     description: string;
     image: string;
     features: { label: string; icon: IconType; className: string; iconClass: string }[];
+    ctaLabel: string;
+    ctaPath: string;
   }[] = [
     {
       title: "Web & App Development",
@@ -56,6 +55,8 @@ const Home = () => {
         { label: "API Integration", icon: FaProjectDiagram, className: "rounded-lg bg-violet-50 px-2 py-1.5 md:px-3 md:py-2 font-medium text-violet-700 flex items-center gap-1.5", iconClass: "text-violet-500 text-xs" },
         { label: "UI/UX Fixes", icon: FaLaptopCode, className: "rounded-lg bg-amber-50 px-2 py-1.5 md:px-3 md:py-2 font-medium text-amber-700 flex items-center gap-1.5", iconClass: "text-amber-500 text-xs" },
       ],
+      ctaLabel: "Explore Web Development",
+      ctaPath: "/services?category=web-app-development",
     },
     {
       title: "Cloud Computing & Deployment",
@@ -68,6 +69,8 @@ const Home = () => {
         { label: "Monitoring", icon: FaProjectDiagram, className: "rounded-lg bg-violet-50 px-2 py-1.5 md:px-3 md:py-2 font-medium text-violet-700 flex items-center gap-1.5", iconClass: "text-violet-500 text-xs" },
         { label: "Optimization", icon: FaTools, className: "rounded-lg bg-amber-50 px-2 py-1.5 md:px-3 md:py-2 font-medium text-amber-700 flex items-center gap-1.5", iconClass: "text-amber-500 text-xs" },
       ],
+      ctaLabel: "Explore Cloud Services",
+      ctaPath: "/services?category=cloud-computing",
     },
     {
       title: "Freelance Digital Services",
@@ -80,6 +83,8 @@ const Home = () => {
         { label: "Client Support", icon: FaUsers, className: "rounded-lg bg-violet-50 px-2 py-1.5 md:px-3 md:py-2 font-medium text-violet-700 flex items-center gap-1.5", iconClass: "text-violet-500 text-xs" },
         { label: "Service Consulting", icon: FaLaptopCode, className: "rounded-lg bg-amber-50 px-2 py-1.5 md:px-3 md:py-2 font-medium text-amber-700 flex items-center gap-1.5", iconClass: "text-amber-500 text-xs" },
       ],
+      ctaLabel: "Explore Freelance Services",
+      ctaPath: "/services?category=freelance-services",
     },
   ];
 
@@ -126,13 +131,6 @@ const Home = () => {
     document.addEventListener("mousedown", handleOutsideClick);
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
-  useEffect(() => {
-    const updateViewport = () => setIsMobileView(window.innerWidth < 768);
-    updateViewport();
-    window.addEventListener("resize", updateViewport);
-    return () => window.removeEventListener("resize", updateViewport);
-  }, []);
-
 
   useEffect(() => {
     if (submitState !== "success" && submitState !== "error") return;
@@ -331,12 +329,12 @@ const Home = () => {
           </motion.div>
 
           <motion.div
-            initial={isMobileView ? { opacity: 0, y: 40 } : { opacity: 0, x: 60 }}
-            animate={isMobileView ? { opacity: 1, y: 0 } : { opacity: 1, x: 0 }}
+            initial={{ opacity: 0, x: 60 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.9 }}
-            className="w-full md:justify-self-end md:pl-2 md:mt-14"
+            className="w-full mt-4 md:mt-14 flex justify-center md:justify-end md:pl-2"
           >
-            <div className="w-full max-w-[30rem] ml-auto">
+            <div className="w-full max-w-[30rem] mx-auto md:ml-auto md:mr-0">
               <form
                 onSubmit={handleSubmit}
                 className="relative space-y-4 border border-gray-300 dark:border-gray-700 rounded-2xl p-4 pt-10 md:p-5 md:pt-12 bg-white/45 dark:bg-black/10 shadow-[0_10px_30px_rgba(0,0,0,0.08)]"
@@ -537,7 +535,7 @@ const Home = () => {
             className="rounded-3xl bg-gradient-to-r from-purple-400 to-pink-400 p-4 sm:p-6 md:p-12 text-white shadow-[0_18px_48px_rgba(157,78,130,0.22)]"
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-              <div className="order-2 md:order-1">
+              <div className="order-2 md:order-1 flex flex-col min-h-[250px] md:min-h-[280px]">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeService}
@@ -546,26 +544,23 @@ const Home = () => {
                     exit={{ opacity: 0, y: -6 }}
                     transition={{ duration: 0.35 }}
                   >
-                    <h3 className="text-2xl md:text-4xl font-bold mt-2">
+                    <h3 className="mt-2 text-2xl md:text-4xl font-bold min-h-[4.25rem] md:min-h-[6rem]">
                       {activeServiceData.title}
                     </h3>
 
-                    <p className="mt-4 text-sm md:text-base opacity-90 max-w-xl">
+                    <p className="mt-4 text-sm md:text-base opacity-90 max-w-xl min-h-[4.75rem] md:min-h-[4.5rem]">
                       {activeServiceData.description}
                     </p>
                   </motion.div>
                 </AnimatePresence>
 
-                <div className="flex flex-wrap gap-3 mt-6">
-                  <span className="px-4 py-2 rounded-full bg-white/20 border border-white/30 text-sm font-medium">
-                    Web Apps
-                  </span>
-                  <span className="px-4 py-2 rounded-full bg-white/20 border border-white/30 text-sm font-medium">
-                    Cloud Deployments
-                  </span>
-                  <span className="px-4 py-2 rounded-full bg-white/20 border border-white/30 text-sm font-medium">
-                    Freelance Solutions
-                  </span>
+                <div className="mt-auto pt-6">
+                  <button
+                    onClick={() => navigate(activeServiceData.ctaPath)}
+                    className="px-5 py-2.5 rounded-full bg-white/20 border border-white/30 text-sm font-semibold text-white hover:bg-white/30 transition"
+                  >
+                    {activeServiceData.ctaLabel}
+                  </button>
                 </div>
               </div>
 
@@ -668,6 +663,16 @@ const Home = () => {
 };
 
 export default Home;
+
+
+
+
+
+
+
+
+
+
 
 
 
